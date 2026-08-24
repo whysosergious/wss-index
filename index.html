@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Iurii Rogulia - Senior Full-Stack Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style data-purpose="custom-fonts">
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #fafafa;
+        color: #111827;
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          180deg,
+          #110e25 0%,
+          #0a0f25 50%,
+          #000000 100%
+        );
+      }
+      .text-gradient {
+        background: linear-gradient(90deg, #a855f7 0%, #3b82f6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .card-shadow {
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.05),
+          0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      }
+      .soft-green-bg {
+        background-color: #f0fdf4;
+      }
+      .soft-orange-bg {
+        background-color: #fff7ed;
+      }
+
+      /* Animation Styles */
+      @media (prefers-reduced-motion: no-preference) {
+        .reveal {
+          opacity: 0;
+          transform: translateY(30px);
+          transition:
+            opacity 0.8s ease-out,
+            transform 0.8s ease-out;
+        }
+        .reveal.active {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .shimmer-text {
+        background: linear-gradient(
+          90deg,
+          #9ca3af 0%,
+          #ffffff 50%,
+          #9ca3af 100%
+        );
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shimmer 3s linear infinite;
+      }
+      @keyframes shimmer {
+        to {
+          background-position: 200% center;
+        }
+      }
+
+      .hover-lift {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      }
+
+      .hover-scale {
+        transition: transform 0.2s ease;
+      }
+      .hover-scale:hover {
+        transform: scale(1.05);
+      }
+
+      .icon-pulse {
+        transition:
+          transform 0.3s ease,
+          color 0.3s ease;
+      }
+      .icon-pulse:hover {
+        transform: scale(1.1);
+      }
+
+      #mobile-menu {
+        transition:
+          opacity 0.3s ease-in-out,
+          visibility 0.3s ease-in-out;
+      }
+      #mobile-menu.menu-closed {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #mobile-menu.menu-open {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+    <link
+      data-snapdom="injected-import"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="antialiased">
+    <!-- BEGIN: Sticky Header -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-[#110e25]/80 backdrop-blur-md border-b border-white/10"
+      id="main-nav"
+    >
+      <div
+        class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4"
+      >
+        <a class="flex items-center gap-3" href="#">
+          <img
+            alt="Iurii Rogulia Profile"
+            class="w-10 h-10 rounded-full object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF2loem55u9cd1sAabjmpmiitq3JAnA7brqar1hIfDZGdkyZfKGSBvyqweEKGNESXAkxH7gD7sRNo-MNErmi16aoP-NstBmMMGeqh0LHgvHZNz7Hgc1dyTnnuAn7sOee8QRW2fDEv-KKYbA4m0OmfxUxrC8P0nmeKpZ2Hstb3dsmzfE6oMtgkSIvrEc66jsWtzZug09Yxxd8_Ex_kp5pOo3L7LQrYTUKwNwnnlb9Z_ftGxatioSI_2rh4v3ogh1Of5R2IUQTJHGmi-FA"
+          />
+          <span class="font-semibold text-lg text-white">Sergio</span>
+        </a>
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="#projects"
+            >Selected Projects</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="#how-i-work"
+            >How I Work</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="#about"
+            >About</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="#fit"
+            >Fit</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="#stack"
+            >Stack</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="#contact"
+            >Contact</a
+          >
+        </nav>
+        <!-- Mobile Burger -->
+        <button
+          class="md:hidden text-gray-300 hover:text-white icon-pulse"
+          id="mobile-menu-btn"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+    <!-- Mobile Menu Overlay -->
+    <div
+      class="fixed inset-0 bg-[#110e25] z-40 flex-col items-center justify-center flex menu-closed"
+      id="mobile-menu"
+    >
+      <div class="flex flex-col items-center gap-8 w-full px-8">
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="#projects"
+          >Projects</a
+        >
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="#how-i-work"
+          >How I Work</a
+        >
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="#about"
+          >About</a
+        >
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="#fit"
+          >Good Fit</a
+        >
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="#stack"
+          >Stack</a
+        >
+        <a
+          class="mt-8 bg-white text-gray-900 font-semibold py-4 px-12 rounded-full hover:bg-gray-100 transition-colors mobile-link w-full text-center hover-scale"
+          href="#contact"
+          >Contact me</a
+        >
+      </div>
+      <button
+        class="absolute top-6 right-6 text-gray-300 hover:text-white icon-pulse"
+        id="close-menu-btn"
+      >
+        <svg
+          class="h-8 w-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 18L18 6M6 6l12 12"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          ></path>
+        </svg>
+      </button>
+    </div>
+    <!-- END: Sticky Header -->
+    <!-- BEGIN: Hero Section -->
+    <section
+      class="hero-gradient text-white min-h-screen flex flex-col pt-24 pb-20 relative px-4 sm:px-6 lg:px-8 items-center justify-center reveal active"
+    >
+      <div
+        class="max-w-4xl mx-auto text-center flex-grow flex flex-col justify-center w-full items-center"
+      >
+        <h1 class="md:text-7xl font-bold mb-6 tracking-tight mt-12 text-4xl">
+          <span class="text-white">Sergio</span>&nbsp;<span
+            class="text-gradient"
+            >Stankevich</span
+          >
+        </h1>
+        <h2
+          class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto font-medium shimmer-text"
+        >
+          I build automation that works&nbsp;<span
+            class="border-r-2 border-white pr-1 animate-pulse"
+            >|</span
+          >
+        </h2>
+        <p class="text-gray-400 mb-10 max-w-3xl mx-auto leading-relaxed px-4">
+          Building software since 2001 — from
+          <span class="text-white font-semibold">C# and SQL</span> to
+          <span class="text-white font-semibold"
+            >TypeScript, Rust and production AI systems</span
+          >. <br /><br />Full-Stack Software Engineer based in Sweden/Estonia. I
+          build web platforms, integrations, and automation — and work hands-on
+          from architecture to production.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row justify-center gap-4 mb-20"
+          style="width: 100%"
+        >
+          <a
+            class="bg-white text-gray-900 font-semibold py-3 px-8 rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto hover-scale"
+            href="#contact"
+          >
+            Let's talk
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </a>
+          <a
+            class="border border-gray-700 text-white font-semibold py-3 px-8 rounded-full hover:bg-gray-800 transition-colors w-full sm:w-auto hover-scale"
+            href="#projects"
+          >
+            View projects
+          </a>
+        </div>
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-gray-800 pt-12 w-full px-4"
+        >
+          <div>
+            <div class="text-3xl font-bold text-white mb-1">6+</div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider">
+              Years Experience
+            </div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-white mb-1">100%</div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider">
+              End-to-end ownership
+            </div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-white mb-1">4</div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider">
+              Migration led
+            </div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-white mb-1">32</div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider">
+              Projects Shipped
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="py-24 px-4 sm:px-6 lg:px-8 bg-[#fafafa] reveal active"
+      id="projects"
+    >
+      <div class="max-w-5xl mx-auto">
+        <div
+          class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4"
+        >
+          <h2 class="text-4xl font-bold text-gray-900">Selected Projects</h2>
+          <a
+            class="text-gray-500 hover:text-gray-800 flex items-center gap-1 text-sm font-medium hover-scale"
+            href="#"
+          >
+            View all projects
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Project Card 1 -->
+          <div
+            class="bg-white rounded-3xl border border-gray-100 shadow-lg overflow-hidden flex flex-col hover-lift"
+          >
+            <div class="aspect-video w-full overflow-hidden">
+              <img
+                alt="n8n Workflow"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6Q8F7zeWnBhDuC0lT6HfJNe5BGH_QqQxA39Ph9T1yCIHL6cm2vYfg4ALLB82dZwa7Et6PxqctbGNs8rxc_SB8-mCXhA6OZR6Bi0g7uSW1bqJbTJs_iW0tnSjdgtbzREnKD0o6aqFVcQPK-K9oy7uKIWMragsWc5mis0sm-ZnQbOZGvqVeTneAUH0lVVEgq56DFydE5yIW-CpNd_FN0L1a6AAmED6-h8uU888SxVon5rm3lVmnyF6z"
+              />
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-bold text-gray-900 leading-tight">
+                  n8n Verified Community Node — EU VAT Validation in Workflows
+                </h3>
+              </div>
+              <p class="text-xs text-gray-400 mb-4">August 4, 2024</p>
+              <p class="text-gray-600 mb-6 leading-relaxed text-sm flex-grow">
+                Verified n8n node that performs VAT validation and... It helps
+                companies automate their tax compliance by checking VAT numbers
+                against official databases in real-time.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Typescript</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Next.js</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >n8n</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Node-RED</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Cloud Automation</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Project Card 2 -->
+          <div
+            class="bg-white rounded-3xl border border-gray-100 shadow-lg overflow-hidden flex flex-col hover-lift"
+          >
+            <div class="aspect-video w-full overflow-hidden">
+              <img
+                alt="Portal Dashboard"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiD_hyUns2W-P7Ng8IYzthg5Zsg8MEVP-yioQrdaYy77tJNrOKdBJBEsmFI7An2zXkJFTHbI6eKhuGCTpLclB46lMyxd3d3LztZJDURT6H3XrXTiGxP8gSkEuQVqPLIGv_6ZCcvr8qnbQmL5xCph57JBo0IwZo-LJZ4AVpg_DYPBicATTH6wEhmYMXCVISou1zgIZj20u46IMgbv-0Pl8fodnV6wbRvdubIU6P279nVHV8c8jNQPmF"
+              />
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-bold text-gray-900 leading-tight">
+                  pi.pi.ee — B2B Deal &amp; Document Portal
+                </h3>
+              </div>
+              <p class="text-xs text-gray-400 mb-4">July 2, 2024</p>
+              <p class="text-gray-600 mb-6 leading-relaxed text-sm flex-grow">
+                Internal entrepreneur platform; wholesale dealt to a number of
+                users; supervision: problems, reviews, recommendations, logging,
+                list, B2B and more.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Next.js</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Zod</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Typescript</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >Drizzle</span
+                >
+                <span
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-[10px] font-medium rounded-md"
+                  >PostgreSQL</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Hero Section -->
+    <!-- BEGIN: Case Studies Section -->
+    <section
+      class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto reveal active"
+      id="how-i-work"
+    >
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">From Manual Work to Shipped</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+          The point of the work isn't the code — it's what changes for the
+          business once it's running. A couple of real examples.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Card 1 -->
+        <div
+          class="bg-white rounded-3xl p-8 border border-gray-100 card-shadow hover-lift"
+        >
+          <h3 class="text-xl font-bold mb-6">
+            Custom Curtain Orders, End to End
+          </h3>
+          <div class="bg-gray-50 rounded-2xl p-6 mb-4">
+            <span
+              class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block"
+              >Before</span
+            >
+            <p class="text-gray-700 text-sm leading-relaxed">
+              Two employees handled every custom order by hand — reading
+              dimensions, sketching the shape, calculating the price, and
+              emailing a quote. Slow, and mistakes led to returns.
+            </p>
+          </div>
+          <div class="flex justify-center my-2 text-yellow-500">
+            <svg
+              class="h-6 w-6 icon-pulse"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </div>
+          <div
+            class="soft-green-bg border border-green-100 rounded-2xl p-6 mb-6"
+          >
+            <span
+              class="text-xs font-bold text-green-700 uppercase tracking-wider mb-2 block"
+              >After</span
+            >
+            <p class="text-green-900 text-sm leading-relaxed">
+              Customers configure the exact product on the site. The order runs
+              itself: PDF drawing to the plotter, PostNord shipping, invoice,
+              and account update — no one touches it manually.
+            </p>
+          </div>
+          <a
+            class="text-yellow-600 font-semibold text-sm flex items-center gap-1 hover:text-yellow-700 hover-scale"
+            href="#"
+          >
+            See how
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </a>
+        </div>
+        <!-- Card 2 -->
+        <div
+          class="bg-white rounded-3xl p-8 border border-gray-100 card-shadow hover-lift"
+        >
+          <h3 class="text-xl font-bold mb-6">
+            Shipping Labels for 20–50 Parcels a Day
+          </h3>
+          <div class="bg-gray-50 rounded-2xl p-6 mb-4">
+            <span
+              class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 block"
+              >Before</span
+            >
+            <p class="text-gray-700 text-sm leading-relaxed">
+              Every shipment took 5–7 minutes of manual work: validating the
+              address, booking PostNord, printing the label, and updating
+              records by hand.
+            </p>
+          </div>
+          <div class="flex justify-center my-2 text-yellow-500">
+            <svg
+              class="h-6 w-6 icon-pulse"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </div>
+          <div
+            class="soft-green-bg border border-green-100 rounded-2xl p-6 mb-6"
+          >
+            <span
+              class="text-xs font-bold text-green-700 uppercase tracking-wider mb-2 block"
+              >After</span
+            >
+            <p class="text-green-900 text-sm leading-relaxed">
+              One API call does all of it — address validation, PostNord
+              booking, thermal label, and tracking. Manual work gone, and
+              shipment errors down to a few isolated cases a month.
+            </p>
+          </div>
+          <a
+            class="text-yellow-600 font-semibold text-sm flex items-center gap-1 hover:text-yellow-700 hover-scale"
+            href="#"
+          >
+            See how
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- END: Case Studies Section -->
+    <!-- BEGIN: Profile Section -->
+    <section
+      class="py-24 px-4 sm:px-6 lg:px-8 bg-white border-y border-gray-100 reveal active"
+      id="about"
+    >
+      <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 lg:gap-24"
+      >
+        <div class="w-full md:w-1/2">
+          <img
+            alt="Iurii Rogulia wearing sunglasses"
+            class="rounded-[2.5rem] w-full object-cover shadow-lg max-h-[600px] hover-scale"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRK9v5yuqYSHzaQzL-_eYfG6ZkEf1E7mF-myuXv1najBkyfNRjnXWPwDG4G4OO4xk23V8IYuu7oFB3IX3Aq4alayUf9fyytbCTGiTZdOfu9ZiG9kaeBHVYZqvDdlFRqkwU83hC4aY0ef-y7i1PdVqu71w262KUKozt_gjMHcJyfnpimJo4qT9rcAttLqGzo-FkDMb03keFTNSWlsMDkEb-m5TroC-Mjq3ccsaHrg8-q2mnbL7PgMutdx5iHN8zgxvnHd40Uvp2sfQKkA"
+          />
+        </div>
+        <div class="w-full md:w-1/2">
+          <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            One engineer,<br />
+            <span class="text-yellow-500">the whole</span>
+            <span class="text-green-600">stack</span>
+          </h2>
+          <p class="text-gray-600 text-lg mb-6 leading-relaxed"></p>
+          <div class="">
+            Full-stack web developer with 6+ years of experience
+            building&nbsp;<span class="" style="font-size: 1.125rem"
+              >React/TypeScript frontends and Node.js/.NET backends for SaaS
+              products&nbsp;</span
+            ><span class="" style="font-size: 1.125rem"
+              >and data-heavy applications. Strong focus on UI implementation,
+              frontend&nbsp;</span
+            ><span class="" style="font-size: 1.125rem"
+              >performance, legacy migration, and practical product
+              delivery.</span
+            ><span class="" style="font-size: 1.125rem"
+              >&nbsp;Based in Sweden &amp; Estonia, remote worldwide.</span
+            >
+          </div>
+          <p></p>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-6 w-6 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >Clear communication — you'll always know what's happening</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-6 w-6 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >Bugs and outages get fixed before they affect your
+                customers</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-6 w-6 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >One engineer for everything — code, infrastructure, automation,
+                AI</span
+              >
+            </li>
+          </ul>
+          <a
+            class="text-yellow-600 font-bold text-lg flex items-center gap-2 hover:text-yellow-700 hover-scale"
+            href="#"
+          >
+            Read my full story
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- END: Profile Section -->
+    <!-- BEGIN: Fit Checklist Section -->
+    <section
+      class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto reveal active"
+      id="fit"
+    >
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold">Are We a Good Fit?</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Good Fit Card -->
+        <div
+          class="bg-white rounded-3xl p-8 border border-gray-100 card-shadow hover-lift"
+        >
+          <h3 class="text-xl font-bold mb-6">
+            You're Probably Looking for Someone Like Me If...
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >Your team has a heavy manual workload software should be
+                doing</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >You've outgrown spreadsheet tools and need real systems behind
+                the process</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >Your developers are stretched thin and things are starting to
+                slip</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >Integrations keep breaking and nobody actually owns them</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >Stripe (or any payment flow) doesn't map cleanly onto how your
+                business works</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M5 13l4 4L19 7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span class="text-gray-700"
+                >You want one person who understands the code and the business
+                behind it</span
+              >
+            </li>
+          </ul>
+        </div>
+        <!-- Not Fit Card -->
+        <div
+          class="bg-white rounded-3xl p-8 border border-gray-100 card-shadow hover-lift"
+        >
+          <h3 class="text-xl font-bold mb-6">
+            I'm Probably Not the Right Fit If...
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <div class="bg-gray-100 rounded-full p-1 mt-0.5 flex-shrink-0">
+                <svg
+                  class="h-3 w-3 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M6 18L18 6M6 6l12 12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-gray-700"
+                >You're hunting for the cheapest freelancer you can find</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="bg-gray-100 rounded-full p-1 mt-0.5 flex-shrink-0">
+                <svg
+                  class="h-3 w-3 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M6 18L18 6M6 6l12 12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-gray-700"
+                >You already have a large in-house engineering team</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="bg-gray-100 rounded-full p-1 mt-0.5 flex-shrink-0">
+                <svg
+                  class="h-3 w-3 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M6 18L18 6M6 6l12 12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-gray-700"
+                >You just need pixel-perfect HTML/CSS from a figma design</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="bg-gray-100 rounded-full p-1 mt-0.5 flex-shrink-0">
+                <svg
+                  class="h-3 w-3 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M6 18L18 6M6 6l12 12"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-gray-700"
+                >You're looking for a designer, not a technical partner</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <!-- END: Fit Checklist Section -->
+    <!-- BEGIN: Tech Stack Section -->
+    <section
+      class="py-24 px-4 sm:px-6 lg:px-8 bg-white border-y border-gray-100 reveal active"
+      id="stack"
+    >
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-4">Under the Hood</h2>
+        <p class="text-gray-600 mb-6">
+          The technologies behind the projects — from web and automation to AI
+          and infrastructure.
+        </p>
+        <a
+          class="text-yellow-600 font-medium hover:underline mb-12 inline-block hover-scale"
+          href="#"
+          >See full stack →</a
+        >
+        <!-- Placeholder for Grid, visually similar to screenshot -->
+        <div
+          class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-8 justify-items-center"
+        >
+          <!-- Tech items -->
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl hover-scale cursor-pointer"
+            >
+              TS
+            </div>
+            <span class="text-xs text-gray-600">TypeScript</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-black rounded-full flex items-center justify-center text-white font-bold text-xl hover-scale cursor-pointer"
+            >
+              Vue
+            </div>
+            <span class="text-xs text-gray-600">Vue.js</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-[#61DAFB] bg-opacity-20 rounded-full flex items-center justify-center text-[#61DAFB] hover-scale cursor-pointer"
+            >
+              <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16z"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-xs text-gray-600">React</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold hover-scale cursor-pointer"
+            >
+              C#
+            </div>
+            <span class="text-xs text-gray-600">C#</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 border border-gray-200 rounded-full flex items-center justify-center font-bold hover-scale cursor-pointer"
+            >
+              GCP
+            </div>
+            <span class="text-xs text-gray-600">Google Cloud</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold hover-scale cursor-pointer"
+            >
+              .NET
+            </div>
+            <span class="text-xs text-gray-600">ASP/.NET/Core</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-2xl hover-scale cursor-pointer"
+            >
+              A
+            </div>
+            <span class="text-xs text-gray-600">Azure</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center hover-scale cursor-pointer"
+            >
+              GA
+            </div>
+            <span class="text-xs text-gray-600">Google Analytics</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 hover-scale cursor-pointer"
+            >
+              Node
+            </div>
+            <span class="text-xs text-gray-600">Node.js</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center hover-scale cursor-pointer"
+            >
+              Rust
+            </div>
+            <span class="text-xs text-gray-600">Rust</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center text-red-600 font-bold hover-scale cursor-pointer"
+            >
+              Redis
+            </div>
+            <span class="text-xs text-gray-600">Redis</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center text-black font-bold hover-scale cursor-pointer"
+            >
+              JS
+            </div>
+            <span class="text-xs text-gray-600">JavaScript</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-500 font-bold hover-scale cursor-pointer"
+            >
+              SQL
+            </div>
+            <span class="text-xs text-gray-600">MS/SQL/Lite</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 border border-gray-200 rounded-full flex items-center justify-center font-bold hover-scale cursor-pointer"
+            >
+              R
+            </div>
+            <span class="text-xs text-gray-600">Resend</span>
+          </div>
+          <div class="flex flex-col items-center gap-2 icon-pulse">
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 hover-scale cursor-pointer"
+            >
+              AI
+            </div>
+            <span class="text-xs text-gray-600"
+              >AI &amp; Tools <br />integration</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Tech Stack Section -->
+    <!-- BEGIN: Bottom CTA -->
+    <section
+      class="py-24 px-4 sm:px-6 lg:px-8 flex justify-center reveal active"
+      id="contact"
+    >
+      <div
+        class="bg-[#f2f8f6] rounded-[3rem] p-12 text-center max-w-3xl w-full border border-green-50 relative overflow-hidden"
+      >
+        <!-- Decorative background blur -->
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-br from-green-100/50 to-blue-50/50 blur-3xl -z-10"
+        ></div>
+        <div class="relative z-10">
+          <div class="relative inline-block mb-6">
+            <img
+              alt="Iurii Rogulia"
+              class="w-20 h-20 rounded-full border-4 border-white object-cover mx-auto"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKPEaW2FMXCfutjDk3icEgQr3hyWRHb8jImFH_eU42lpJ6DirkUOLxn4ScrAGk4TTgJGONkcZz0crWiK9nLuOKGnmY2VX3yVj5kJUDC_8ya2x98Yl64QgWGyaEfhr1KNxxQjddG6k3hO8mjA2vZwzeyVjG8-Sj2oAGFkXB4LiWAERIq7J9sw3eTs-pwBlInx68xuxEVWh6Obnb4DfKO8n8z7nem0GwXsoe8vtfzSQViVzuea839mOcvVBJw6DGfAMCgFPOrqRCV94wjA"
+            />
+            <span
+              class="absolute bottom-0 right-0 bg-white text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-gray-200 flex items-center gap-1"
+            >
+              <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+              Available
+            </span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-4">
+            One engineer who ships —<br />not one more vendor to manage.
+          </h2>
+          <p class="text-gray-600 mb-8 max-w-lg mx-auto">
+            I've built and run production systems in logistics, manufacturing,
+            and service companies — web, servers, automation, and integrations.
+            If you need one person to own it end to end, let's talk.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a
+              class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 hover-scale"
+              href="#"
+            >
+              Tell me what you're building
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+            </a>
+            <a
+              class="bg-white/50 border border-gray-200 text-gray-800 font-medium py-3 px-8 rounded-full hover:bg-white transition-colors hover-scale"
+              href="#"
+            >
+              View my work
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Bottom CTA -->
+    <!-- BEGIN: Footer -->
+    <footer
+      class="bg-[#110e25] py-16 px-4 sm:px-6 lg:px-8 border-t border-white/10 text-sm text-gray-400 reveal active"
+    >
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="font-bold text-xl text-white">Sergio</span>
+            <span class="text-green-500 font-bold text-xl">ships.</span>
+          </div>
+          <p class="mb-6">
+            Sergio Stankevich, full-stack software engineer.<br />Professionally
+            building software since 2020.
+          </p>
+          <div class="flex gap-4 mb-6">
+            <a
+              class="text-gray-400 hover:text-white transition-colors icon-pulse"
+              href="#"
+              ><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                ></path></svg
+            ></a>
+            <a
+              class="text-gray-400 hover:text-white transition-colors icon-pulse"
+              href="#"
+              ><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                ></path></svg
+            ></a>
+          </div>
+          <div class="flex flex-wrap gap-4 underline">
+            <a class="hover:text-white transition-colors" href="#">Pricing</a>
+            <a class="hover:text-white transition-colors" href="#"
+              >Quality checklist</a
+            >
+            <a class="hover:text-white transition-colors" href="#"
+              >Privacy Policy</a
+            >
+            <a class="hover:text-white transition-colors" href="#"
+              >Cookie Policy</a
+            >
+            <a class="hover:text-white transition-colors" href="#"
+              >Cookie settings</a
+            >
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-4">Business</h4>
+          <p class="mb-1">Sergio Stankevich</p>
+          <p class="mb-1">VAT ID: 9006041256</p>
+          <p class="mb-4">Stockholm, Sweden - Tallinn, Estonia</p>
+          <a
+            class="underline hover:text-white transition-colors"
+            href="mailto:iurii@rogulia.fi"
+            >sergio.stankevich@gmail.com</a
+          >
+        </div>
+      </div>
+    </footer>
+    <!-- END: Footer -->
+    <script>
+      // Mobile Menu Logic
+      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+      const closeMenuBtn = document.getElementById("close-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
+
+      function toggleMenu() {
+        mobileMenu.classList.toggle("menu-closed");
+        mobileMenu.classList.toggle("menu-open");
+        document.body.classList.toggle("overflow-hidden");
+      }
+
+      mobileMenuBtn.addEventListener("click", toggleMenu);
+      closeMenuBtn.addEventListener("click", toggleMenu);
+
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", toggleMenu);
+      });
+
+      // Intersection Observer for Entrance Animations
+      document.addEventListener("DOMContentLoaded", () => {
+        const reveals = document.querySelectorAll(".reveal");
+
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        if (!prefersReducedMotion) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("active");
+                  // Optional: Unobserve after revealing to prevent re-animation
+                  // observer.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+          );
+
+          reveals.forEach((el) => observer.observe(el));
+        } else {
+          // If reduced motion, set them active immediately
+          reveals.forEach((el) => el.classList.add("active"));
+        }
+
+        // Sticky Header Scroll Effect
+        const header = document.getElementById("main-nav");
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 20) {
+            header.classList.add("shadow-lg", "bg-[#110e25]/95");
+            header.classList.remove("bg-[#110e25]/80");
+          } else {
+            header.classList.remove("shadow-lg", "bg-[#110e25]/95");
+            header.classList.add("bg-[#110e25]/80");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
