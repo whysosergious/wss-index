@@ -1,0 +1,34 @@
+[
+  {
+    "title": "n8n Verified Community Node — EU VAT Validation in Workflows",
+    "date": "August 4, 2024",
+    "description": "Verified n8n node that performs VAT validation and... It helps companies automate their tax compliance by checking VAT numbers against official databases in real-time.",
+    "tags": [
+      "Typescript",
+      "Next.js",
+      "n8n",
+      "Node-RED",
+      "Cloud Automation"
+    ],
+    "image": {
+      "src": "https://lh3.googleusercontent.com/aida-public/AB6AXuA6Q8F7zeWnBhDuC0lT6HfJNe5BGH_QqQxA39Ph9T1yCIHL6cm2vYfg4ALLB82dZwa7Et6PxqctbGNs8rxc_SB8-mCXhA6OZR6Bi0g7uSW1bqJbTJs_iW0tnSjdgtbzREnKD0o6aqFVcQPK-K9oy7uKIWMragsWc5mis0sm-ZnQbOZGvqVeTneAUH0lVVEgq56DFydE5yIW-CpNd_FN0L1a6AAmED6-h8uU888SxVon5rm3lVmnyF6z",
+      "alt": "n8n Workflow"
+    }
+  },
+  {
+    "title": "pi.pi.ee — B2B Deal & Document Portal",
+    "date": "July 2, 2024",
+    "description": "Internal entrepreneur platform; wholesale dealt to a number of users; supervision: problems, reviews, recommendations, logging, list, B2B and more.",
+    "tags": [
+      "Next.js",
+      "Zod",
+      "Typescript",
+      "Drizzle",
+      "PostgreSQL"
+    ],
+    "image": {
+      "src": "https://lh3.googleusercontent.com/aida-public/AB6AXuAiD_hyUns2W-P7Ng8IYzthg5Zsg8MEVP-yioQrdaYy77tJNrOKdBJBEsmFI7An2zXkJFTHbI6eKhuGCTpLclB46lMyxd3d3LztZJDURT6H3XrXTiGxP8gSkEuQVqPLIGv_6ZCcvr8qnbQmL5xCph57JBo0IwZo-LJZ4AVpg_DYPBicATTH6wEhmYMXCVISou1zgIZj20u46IMgbv-0Pl8fodnV6wbRvdubIU6P279nVHV8c8jNQPmF",
+      "alt": "Portal Dashboard"
+    }
+  }
+]

@@ -1,0 +1,22 @@
+.hero-gradient {
+  background: linear-gradient(
+    180deg,
+    #110e25 0%,
+    #0a0f25 50%,
+    #000000 100%
+  );
+}
+
+#mobile-menu {
+  transition:
+    opacity 0.3s ease-in-out,
+    visibility 0.3s ease-in-out;
+}
+#mobile-menu.menu-closed {
+  opacity: 0;
+  visibility: hidden;
+}
+#mobile-menu.menu-open {
+  opacity: 1;
+  visibility: visible;
+}
