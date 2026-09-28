@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Twelve taps, zero surprises — The Hop Yard · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">The Hop Yard</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Craft beer pub · Södermalm, Stockholm · 2022 · 5 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Twelve taps, <span class="text-gradient">zero surprises</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A Södermalm taproom where the menu always tells the truth: live keg levels, automatic reorders, and Untappd ratings that update themselves.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Freelance full-stack build</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">There is a special kind of embarrassment in pouring a guest a beer, watching the tap sputter, and then reading the chalkboard behind you that still promises it. The Hop Yard had twelve taps and a chalkboard that lied every Friday. Staff lifted kegs in the cold room to guess what was left — a method with a long tradition and zero accuracy. My brief was simple: never let a guest order a beer that doesn't exist.</p>
+<p>What I built is a nervous system for the bar. Cheap flow-meter pulses become litres remaining per keg. The TV menu, the website and the staff tablet all read one live tap list. Under five litres, the bar gets a reorder nudge; at zero, the tap flips to "kicked" everywhere instantly. Untappd scores sync overnight so the menu carries ratings without anyone typing them in.</p>
+
+<figure class="blog-fig">
+<img alt="Warm pub interior with the bar and taps" src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&q=80" />
+<figcaption>Twelve taps on the wall, one source of truth behind them.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Real-time keg tracking with honest levels, inventory automation that reorders before a tap dies mid-service, Untappd integration, and a customer-facing menu that can never show a kicked keg. It had to survive a Friday night with sticky fingers on the tablet and no patience for "the system is syncing".</p>
+
+<h2>What kept me up at night</h2>
+<p>First, <strong>cheap sensors lie</strong>. Flow-meter pulses drift with temperature, foam and line pressure, and every line flush during cleaning looks like a massive pour. Raw pulses would have shown fantasy numbers within a week. So each tap got its own calibration constant, and anything flagged as a cleaning flush is excluded from the maths entirely. Honest litres or nothing.</p>
+<p>Second, <strong>the menu must never disagree with reality</strong>. A TV showing a dead beer is the original sin this whole project exists to kill. One query powers every screen, kicked kegs are filtered at the database — not in the frontend, where someone will forget — and status changes push out live instead of waiting for a refresh.</p>
+<p>Third, <strong>Untappd's rate limits</strong>. You can't hammer their API from a bar with hundreds of beers; you get throttled and the whole sync dies. The sync runs nightly, one request per second-ish, caches everything, and any failure just queues a retry. Boring, resilient, invisible.</p>
+
+<div class="pull-quote">"A TV menu showing a dead beer is the original sin. Filter kicked kegs in the database, not in the frontend where someone will forget."</div>
+
+<figure class="blog-fig">
+<img alt="Beer glasses raised in a cheers" src="https://images.unsplash.com/photo-1518176258769-f227c798150e?w=1200&q=80" />
+<figcaption>Skål — the pours that count are the ones guests actually drink. Cleaning flushes don't make the ledger.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>The keg-level module. It turns raw pulses into a status the whole bar understands — pouring, low, kicked — with per-tap calibration, cleaning exclusions, and a reorder nudge exactly once when a keg crosses into "low". Everything downstream, from the TV menu to the supplier email, keys off this one function.</p>
+<pre class="code"><code><span class="c">// keg-meter.ts — pulses in, truth out. Calibrated per tap.</span>
+<span class="k">export interface</span> Keg {
+  id: <span class="s">string</span>; beerName: <span class="s">string</span>;
+  capacityMl: <span class="k">number</span>; remainingMl: <span class="k">number</span>;
+  mlPerPulse: <span class="k">number</span>; <span class="c">// calibrated: foam and pressure differ per line</span>
+  status: <span class="s">'pouring' | 'low' | 'kicked'</span>;
+  reorderSent: <span class="k">boolean</span>;
+}
+
+<span class="k">const</span> LOW_THRESHOLD_ML = 5000; <span class="c">// roughly the last honest evening</span>
+
+<span class="k">export function</span> applyPulses(keg: Keg, pulses: <span class="k">number</span>, ctx: { cleaning: <span class="k">boolean</span> }) {
+  <span class="k">if</span> (ctx.cleaning) <span class="k">return</span> keg; <span class="c">// line flushes are not pours</span>
+  <span class="k">if</span> (pulses &lt; 0) <span class="k">throw new Error</span>(<span class="s">'Negative pulses: check the meter wiring'</span>);
+
+  keg.remainingMl = Math.max(0, keg.remainingMl - pulses * keg.mlPerPulse);
+
+  <span class="k">const</span> was = keg.status;
+  keg.status = keg.remainingMl &lt;= 0 ? <span class="s">'kicked'</span>
+    : keg.remainingMl &lt; LOW_THRESHOLD_ML ? <span class="s">'low'</span> : <span class="s">'pouring'</span>;
+
+  <span class="c">// Nudge the supplier exactly once per keg — no spam, no silence.</span>
+  <span class="k">if</span> (keg.status === <span class="s">'low'</span> &amp;&amp; was === <span class="s">'pouring'</span> &amp;&amp; !keg.reorderSent) {
+    queueReorder(keg); <span class="c">// supplier email + staff tablet ping</span>
+    keg.reorderSent = true;
+  }
+  <span class="k">if</span> (keg.status === <span class="s">'kicked'</span>) pushTapUpdate(keg); <span class="c">// every screen, now</span>
+
+  <span class="k">return</span> keg;
+}</code></pre>
+<p>The <span style="font-family:monospace">was === 'pouring'</span> transition check is the whole trick: the nudge fires on the crossing, not on the level, so a meter that flutters around the threshold can't spam the supplier.</p>
+
+<h2>How it landed</h2>
+<p>No more mid-service dry taps — reorders now happen while there's still an evening left in the keg. Beer waste dropped by about a third because "lift the keg and guess" retired. And the chalkboard? It still exists, actually. It just says things like "ask what's new" now, because the TV handles the truth.</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd log temperature next to every pulse from the start. Twice we chased "drunk meter" ghosts that turned out to be a warm cold-room making foam — data we could have had for the price of a sensor.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">Vue 3</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Node.js</span><span class="tag-chip">PostgreSQL</span><span class="tag-chip">Untappd API</span><span class="tag-chip">Real-time</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./bistro-sodra-restaurant.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">Bistro Södra restaurant</span></a>
+<a href="./malt-barrel-bar.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">Malt &amp; Barrel bar</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Digitise my bar</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

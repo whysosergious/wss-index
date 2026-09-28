@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Fifteen thousand SKUs and one man's memory — FurnituraPlus · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">FurnituraPlus</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Furniture fittings · Minsk, Belarus · 2022 · 5 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Fifteen thousand SKUs and <span class="text-gradient">one man's memory</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A Belarus fittings reseller whose prices, variants and stock lived in people's heads — until 15,000 SKUs moved into a store that prices, searches and syncs itself.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Freelance full-stack build</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">The warehouse manager at FurnituraPlus could look at a hinge and tell you its angle, its mount, whether it was in stock, and what your price was — from memory. It was genuinely impressive, and it was also the entire ordering system. Trade clients ordered from PDF price lists by phone, variant codes were cryptic strings only insiders could decode, stock answers took a day, and the tier discounts lived in exactly one person's head. When that person went on holiday, the business slowed down. That's not a process; that's a hostage situation with extra steps.</p>
+<p>So we built the boring miracle: a B2B store where a furniture maker configures a hinge visually — angle, mount, finish — sees their own tier price and live stock, and reorders in one click. Behind it, the ERP syncs stock and invoices both ways, and the search finds "that Blum thing, 110 degrees" in milliseconds across fifteen thousand rows.</p>
+
+<figure class="blog-fig">
+<img alt="Furnished living room with sofa and fittings in use" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80" />
+<figcaption>Every hinge and slide in a room like this is a SKU someone had to find, price and order. Now it takes seconds.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Put the whole catalogue online with real variants (not cryptic codes), tiered trade pricing that matches what the sales desk would quote, live stock from the ERP, and search that forgives typos and half-remembered names. If a client can order at 11pm without calling anyone, we win.</p>
+
+<h2>What kept me up at night</h2>
+<p>First, <strong>impossible combinations</strong>. A hinge's angle, mount, finish and hand interact — not every combination exists, and letting a client order a phantom SKU means an embarrassing cancellation. The variant matrix only expands compatible options, so the UI physically cannot arrive at a product that doesn't exist. The configurator guides; it never apologises.</p>
+<p>Second, <strong>two prices for one product</strong>. The moment the storefront and the ERP disagree on a tier price, trust evaporates and the phones start ringing again. So pricing is one server-side engine — tiers plus volume breaks — called by the store and mirrored into the ERP documents. Same inputs, same number, everywhere.</p>
+<p>Third, <strong>search across 15k cryptic rows</strong>. Clients search like humans: "blum hinge 110", misspelled, partial. Trigram plus full-text search over names, codes and attributes made that instant, with a 200-millisecond budget I refused to break. A B2B store where you can't find things is just a prettier PDF.</p>
+
+<div class="pull-quote">"The configurator guides; it never apologises. The UI physically cannot arrive at a product that doesn't exist."</div>
+
+<figure class="blog-fig">
+<img alt="Workspace interior with a designer armchair" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80" />
+<figcaption>Trade clients don't browse — they hunt. Search had to forgive typos and half-remembered names.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>The pricing engine. Bronze, silver, gold tiers with volume breaks, computed server-side in one place — the storefront calls it, the ERP mirrors it, and the "what's my price?" phone calls stopped. This is the function the whole business now runs on:</p>
+<pre class="code"><code><span class="c">// pricing.ts — ONE engine for storefront and ERP. Same inputs, same number.</span>
+<span class="k">export type</span> Tier = <span class="s">'bronze' | 'silver' | 'gold'</span>;
+
+<span class="k">const</span> TIER_DISCOUNT: Record&lt;Tier, <span class="k">number</span>&gt; = {
+  bronze: 0, silver: 0.07, gold: 0.12,
+};
+
+<span class="k">function</span> volumeDiscount(qty: <span class="k">number</span>): <span class="k">number</span> {
+  <span class="k">if</span> (qty &gt;= 1000) <span class="k">return</span> 0.08;
+  <span class="k">if</span> (qty &gt;= 200) <span class="k">return</span> 0.04;
+  <span class="k">return</span> 0;
+}
+
+<span class="k">export function</span> tradePrice(base: <span class="k">number</span>, tier: Tier, qty: <span class="k">number</span>): <span class="k">number</span> {
+  <span class="k">const</span> discounted = base * (1 - TIER_DISCOUNT[tier]) * (1 - volumeDiscount(qty));
+  <span class="k">return</span> Math.round(discounted * 100) / 100;
+}
+
+<span class="c">// Quote lines keep the receipt: every discount visible, every line auditable.</span>
+<span class="k">export function</span> quoteLine(base: <span class="k">number</span>, tier: Tier, qty: <span class="k">number</span>) {
+  <span class="k">return</span> {
+    unit: tradePrice(base, tier, 1),
+    total: Math.round(tradePrice(base, tier, qty) * qty * 100) / 100,
+    breakdown: <span class="s">`${tier} −${TIER_DISCOUNT[tier] * 100}% · vol(${qty}) −${volumeDiscount(qty) * 100}%`</span>,
+  };
+}</code></pre>
+<p>The breakdown string is the quiet hero: every quote shows exactly how the price was built. Clients stopped haggling over numbers they could see being fair.</p>
+
+<h2>How it landed</h2>
+<p>Fifteen thousand SKUs, searchable in under 200 milliseconds. Stock that's real because the ERP says so twice a day, both directions. Reorders in one click, quotes clients can forward to their own customers. And the warehouse manager? He still knows every hinge by sight. He just doesn't have to be the database anymore — he finally took a proper holiday.</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd add reorder predictions sooner — "you buy these slides every six weeks, you're due" — from order history. The data was there from month two; we only surfaced it much later, and it would have been the stickiest feature in the store.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">Next.js</span><span class="tag-chip">TypeScript</span><span class="tag-chip">PostgreSQL</span><span class="tag-chip">ERP</span><span class="tag-chip">B2B E-commerce</span><span class="tag-chip">Pricing Engine</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./potolokmaster-ceilings.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">PotolokMaster ceilings</span></a>
+<a href="./hammarby-bryggeri.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">Hammarby Bryggeri</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Build my B2B store</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

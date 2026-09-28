@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Two days, three hundred pours, one live tap list — Festival · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Beer &amp; Whiskey Festival</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Stockholm Beer &amp; Whiskey Festival · Stockholm · 2024 · 6 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Two days, three hundred pours, <span class="text-gradient">one live tap list</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">The platform behind Stockholm Beer &amp; Whiskey Festival: timed tickets that can't oversell, exhibitors running their own pour lists, gates that scan without Wi-Fi, and a leaderboard the whole hall watches.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Freelance full-stack build</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">I went to the festival the year before I built for it, and I spent half my time in the wrong queues. The tap list was paper taped to stands, half of it outdated by evening. Some pours ran out silently; the good stuff drew lines you couldn't see until you'd already joined them. The organisers, meanwhile, ran tickets in one system, exhibitors in spreadsheets, and learned what worked weeks later from a survey. Everybody was guessing — guests, pourers, organisers. I kept thinking: this whole event is an information problem wearing a beer costume.</p>
+<p>So the next year, we fixed the information. Timed-entry tickets capped the crowds per hour. Exhibitors managed their own pours from their phones — kicked keg, two taps, you're on the map instantly. Visitors rated live, the leaderboard updated on the big screens, and the gates scanned signed tickets that didn't care whether the Wi-Fi was alive. For two days, three hundred pours were exactly where the system said they were.</p>
+
+<figure class="blog-fig">
+<img alt="Beer tasting flight on a wooden board at the festival" src="https://images.unsplash.com/photo-1608270586620-248524c67de9?w=1200&q=80" />
+<figcaption>The whole festival in one photo: small pours, honest opinions, and a rating for every one of them.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>One platform for three crowds: visitors who want to find great pours without blind queues, exhibitors who want to manage their stand without paperwork, and organisers who want full halls without overcrowding — plus analytics afterwards that actually say what happened. Tiered ticketing, exhibitor portal, interactive venue map, live ratings, all of it.</p>
+
+<h2>What kept me up at night</h2>
+<p>First, <strong>overselling a time slot</strong>. A festival hall has a fire limit, not a vibe limit. If two people buy the last ticket to the same hour at the same second, somebody gets turned away at the door — the worst possible experience. Booking runs inside a row-locked transaction: check capacity, create the Stripe session, increment, commit. The database is the bouncer, and it never blinks.</p>
+<p>Second, <strong>the dead gate</strong>. Festival Wi-Fi dies the way festival Wi-Fi does — right at peak entry, obviously. So tickets are signed tokens the scanners verify offline: valid signature, right slot, not seen before. Scans queue locally and sync when the network returns. Replays get rejected on the spot. The queue kept moving through a full outage on Saturday, which is my favourite sentence in this whole story.</p>
+<p>Third, <strong>stale pour lists</strong>. A leaderboard is only magic if it's true. Exhibitors toggle their own pours — kicked, pouring, back on — and the ratings wall recomputes live from the pour ledger. No organiser middleman, no paper, no "is this still on?" pilgrimages across the hall.</p>
+
+<div class="pull-quote">"The database is the bouncer, and it never blinks. The queue kept moving through a full outage on Saturday."</div>
+
+<figure class="blog-fig">
+<img alt="Festival crowd celebrating together in the hall" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80" />
+<figcaption>Saturday peak: full hall, moving queues, and nobody turned away at the door.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>The slot booking plus the offline gate check, together. The first makes overselling structurally impossible; the second keeps entry moving when the network doesn't. Between them they cover the two moments a festival lives or dies by: selling the ticket, and honouring it.</p>
+<pre class="code"><code><span class="c">// festival-entry.ts — sell honestly, scan anywhere</span>
+<span class="k">export async function</span> bookSlot(slotId: <span class="s">string</span>, email: <span class="s">string</span>) {
+  <span class="k">return await</span> db.tx(<span class="k">async</span> (t) =&gt; {
+    <span class="c">// Lock the slot row: concurrent buyers queue here, not at the door.</span>
+    <span class="k">const</span> slot = <span class="k">await</span> t.one(
+      <span class="s">`SELECT capacity, sold FROM slots WHERE id = $1 FOR UPDATE`</span>, [slotId]);
+    <span class="k">if</span> (slot.sold &gt;= slot.capacity) <span class="k">throw new Error</span>(<span class="s">'This hour is full — pick another'</span>);
+
+    <span class="k">const</span> ticket = <span class="k">await</span> stripe.checkout.create({ slotId, email });
+    <span class="k">await</span> t.none(<span class="s">`UPDATE slots SET sold = sold + 1 WHERE id = $1`</span>, [slotId]);
+    <span class="k">return</span> { ...ticket, qr: signEntry({ jti: ticket.id, slotId }) };
+  });
+}
+
+<span class="c">// Gate scanner: works fully offline. Syncs when the network returns.</span>
+<span class="k">const</span> seen = <span class="k">new Set</span>&lt;<span class="s">string</span>&gt;(); <span class="c">// + persisted log for post-event sync</span>
+
+<span class="k">export function</span> verifyEntry(qr: <span class="s">string</span>, nowSlot: <span class="s">string</span>) {
+  <span class="k">const</span> t = jwt.verify(qr, process.env.GATE_SECRET!); <span class="c">// ticket id + slot</span>
+  <span class="k">if</span> (t.slotId !== nowSlot) <span class="k">throw new Error</span>(<span class="s">'Wrong entry hour — see staff'</span>);
+  <span class="k">if</span> (seen.has(t.jti)) <span class="k">throw new Error</span>(<span class="s">'Already scanned'</span>);
+  seen.add(t.jti);
+  queueSync(t); <span class="c">// replays in when Wi-Fi is back; replays of QRs still rejected</span>
+  <span class="k">return</span> t;
+}</code></pre>
+<p>The <span style="font-family:monospace">FOR UPDATE</span> lock is doing all the heavy lifting in part one: without it, two simultaneous buyers both see "one left" and both win. With it, the second simply waits its turn and gets told the truth.</p>
+
+<h2>How it landed</h2>
+<p>Zero oversold slots across the whole weekend. The live leaderboard became the thing people gathered around — exhibitors watched their pours climb in real time, which did more for data quality than any nagging email ever could. Entry survived the Saturday Wi-Fi outage without slowing. And the organisers finally got their analytics while the glasses were still being washed: which hours peaked, which pours won, where the queues formed.</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd add a "still pouring near me" view sorted by walking distance inside the hall. Visitors loved the leaderboard but kept asking the follow-up question — "okay, but where?" — and the map answered it one tap too late.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">Next.js</span><span class="tag-chip">TypeScript</span><span class="tag-chip">PostgreSQL</span><span class="tag-chip">Stripe</span><span class="tag-chip">Real-time</span><span class="tag-chip">Analytics</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./hammarby-bryggeri.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">Hammarby Bryggeri</span></a>
+<a href="../projects.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Archive →</span><span class="font-semibold">All projects</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Run my event on this</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

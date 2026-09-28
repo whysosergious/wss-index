@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Friday night, forty covers, zero paper tickets — Bistro Södra · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Bistro Södra</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Restaurant · Södermalm, Stockholm · 2023 · 5 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Friday night, forty covers, <span class="text-gradient">zero paper tickets</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A Södermalm restaurant where guests order from their phones, the kitchen works off screens, and the smudged-paper wrong dish is extinct.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Freelance full-stack build</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">The owner told me the story in one sentence: "On Fridays we lose money on the mistakes, not on the food." Waiters re-typing orders into the POS, paper tickets in a hot kitchen, one smudged line — wrong dish, remake, comped dessert, a table that leaves a three-star review for food they never actually ordered. I spent two Friday services standing near the pass just watching, and honestly the wonder is that it worked at all.</p>
+<p>So we rebuilt the flow around one idea: the guest's phone is the order pad, and everything downstream — kitchen display, reservations, the evening close — reads from the same record. Scan the QR on your table, order, pay. The kitchen sees it in under a second, grouped by station. The host sees the table flip to occupied. Closing time, the numbers already agree.</p>
+
+<figure class="blog-fig">
+<img alt="Warm restaurant dining room with set tables" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80" />
+<figcaption>The dining room on a quiet Tuesday — the system had to disappear here and survive Friday.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Table reservations synced with live table state, QR-code ordering with no app install and no login, a kitchen display split by station (hot / cold / bar), and a POS that stays the source of truth so the evening close is boring. Boring closes were the actual acceptance criterion.</p>
+
+<h2>What kept me up at night</h2>
+<p>First, <strong>table mix-ups</strong>. No-login QR ordering is wonderful until someone photographs a code, sends it to a friend, or sits down at the wrong table. Every order has to be provably attached to the right table, and codes have to die quickly. I signed each QR payload with HMAC and gave it a short expiry — the dining room equivalent of a session cookie you can't steal by screenshot.</p>
+<p>Second, <strong>the kitchen can't wait</strong>. A display that lags or drops tickets during rush is worse than paper, because at least paper is honest about being there. Orders fan out over WebSockets per station with acknowledgement, and a reconnected screen re-fires anything it missed. Under a second from phone tap to kitchen screen, measured, not hoped.</p>
+<p>Third, <strong>the host's nightmare: double-seating</strong>. Reservations, walk-ins and lingering tables all disagreed. One query — one view — now answers "what is the state of every table right now", and the floor map reads nothing else.</p>
+
+<div class="pull-quote">"The evening close should be boring. If closing is exciting, something upstream is broken."</div>
+
+<figure class="blog-fig">
+<img alt="Plated dish served at the restaurant" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80" />
+<figcaption>What the guest remembers: the plate. Everything I built exists so this moment survives Friday rush.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>Table sessions. This small module is the trust anchor of the whole system: it mints the QR tokens, verifies them on every order, and rejects anything expired, forged, or attached to a table that has since been closed and reopened. Every challenge above — mix-ups, screenshots, wrong tables — funnels through these forty lines.</p>
+<pre class="code"><code><span class="c">// table-session.ts — the trust anchor: who ordered, and where are they sitting?</span>
+<span class="k">import</span> { createHmac, timingSafeEqual } <span class="k">from</span> <span class="s">'node:crypto'</span>;
+
+<span class="k">const</span> SECRET = process.env.QR_SECRET!; <span class="c">// rotated nightly</span>
+<span class="k">const</span> TTL_SECONDS = 4 * 60 * 60; <span class="c">// one service; screenshots expire</span>
+
+<span class="k">export function</span> mintTableToken(tableId: <span class="s">string</span>, serviceDate: <span class="s">string</span>): <span class="s">string</span> {
+  <span class="k">const</span> exp = Math.floor(Date.now() / 1000) + TTL_SECONDS;
+  <span class="k">const</span> payload = <span class="s">`${tableId}.${serviceDate}.${exp}`</span>;
+  <span class="k">const</span> sig = createHmac(<span class="s">'sha256'</span>, SECRET).update(payload).digest(<span class="s">'base64url'</span>);
+  <span class="k">return</span> <span class="s">`${payload}.${sig}`</span>; <span class="c">// encoded into the table QR</span>
+}
+
+<span class="k">export function</span> verifyTableToken(token: <span class="s">string</span>, serviceDate: <span class="s">string</span>): <span class="s">string</span> {
+  <span class="k">const</span> [tableId, date, exp, sig] = token.split(<span class="s">'.'</span>);
+  <span class="k">if</span> (date !== serviceDate) <span class="k">throw new Error</span>(<span class="s">'QR is from another service'</span>);
+  <span class="k">if</span> (Date.now() &gt; Number(exp) * 1000) <span class="k">throw new Error</span>(<span class="s">'QR expired — ask staff for a fresh one'</span>);
+
+  <span class="k">const</span> expected = createHmac(<span class="s">'sha256'</span>, SECRET)
+    .update(<span class="s">`${tableId}.${date}.${exp}`</span>).digest(<span class="s">'base64url'</span>);
+  <span class="k">const</span> a = Buffer.from(sig ?? <span class="s">''</span>), b = Buffer.from(expected);
+  <span class="k">if</span> (a.length !== b.length || !timingSafeEqual(a, b)) {
+    <span class="k">throw new Error</span>(<span class="s">'Invalid table code'</span>);
+  }
+  <span class="k">return</span> tableId; <span class="c">// every order line is stamped with this</span>
+}</code></pre>
+<p>The service-date binding is the detail I'm proudest of: even a perfect screenshot of today's QR is useless tomorrow. Staff reprint codes with the morning setup, and yesterday's photos become souvenirs.</p>
+
+<h2>How it landed</h2>
+<p>Order errors fell off a cliff — roughly 85% down, because the kitchen reads what the guest wrote, not what a waiter deciphered. Tables turned about 20% faster at peak since payment closes the table instead of flagging someone down. And the owner got his boring closes: the POS, the kitchen and the reservations finally tell the same story.</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd have built the offline story sooner. When the Wi-Fi hiccuped during the first busy Saturday, ordering paused for ten minutes. A small queue-and-retry on the guest side would have made it a non-event instead of a war story.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">React</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Node.js</span><span class="tag-chip">PostgreSQL</span><span class="tag-chip">WebSockets</span><span class="tag-chip">POS</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./ungapped-knockout-to-vue3-migration.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">KnockoutJS → Vue 3 migration</span></a>
+<a href="./hop-yard-pub.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">The Hop Yard pub</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Build my restaurant system</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

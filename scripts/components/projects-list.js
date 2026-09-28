@@ -33,8 +33,12 @@ class ProjectsList extends HTMLElement {
   }
 
   renderProjects(projects) {
+    let visible = projects;
+    if (this.hasAttribute("featured")) {
+      visible = projects.filter((project) => project.featured);
+    }
     this.replaceChildren(
-      ...projects.map((project) => {
+      ...visible.map((project) => {
         const card = document.createElement("project-card");
         card.data = project;
         return card;

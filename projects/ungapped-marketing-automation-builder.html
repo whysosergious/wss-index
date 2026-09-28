@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>The builder that had to never lose a campaign — Ungapped · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Marketing automation builder</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Ungapped · Stockholm · March 2021 – February 2024 · 6 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">The builder that had to <span class="text-gradient">never lose a campaign</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">Three years inside a marketing SaaS, building the canvas where other people's revenue gets orchestrated — and learning what "production-safe" really means when a bug costs someone their Black Friday.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Full-stack developer, Ungapped</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">When I joined Ungapped in March 2021, the automation builder was the kind of feature everyone demos and nobody wants to own. Marketers built campaigns as rigid step lists, and anything with real branching — wait two days, did they open it, if yes do this, if no do that — turned into a pile of disconnected settings pages. My job, over the next three years, became making that complexity visual, fast, and safe to run every single day.</p>
+<p>The stakes were personal quickly. These weren't toy workflows: the builder orchestrated real email delivery to real customer lists, some with hundreds of thousands of contacts. If preview showed one thing and production did another, somebody's launch day was ruined. That one fear shaped almost every technical decision I made.</p>
+
+<figure class="blog-fig">
+<img alt="Campaign analytics dashboard with charts" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" />
+<figcaption>The analytics view — marketers lived here every morning, so the numbers had to be fast and trustworthy.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Give marketers a drag-and-drop canvas — triggers, delays, conditions, actions — that handles genuinely complex user flows and high-volume data, while unifying the three editors (email, survey, landing page) and the reporting behind it. On the backend: C#/.NET services and Azure Functions for delivery, subscriber synchronisation and analytics, with MSSQL underneath.</p>
+<p>Sounds like a normal SaaS roadmap. The hard part was never any single feature. It was the combination: visual editing, deterministic execution, and half-a-million-row lists, all at once, without the app falling over.</p>
+
+<h2>What kept me up at night</h2>
+<p>Three things, honestly. First, <strong>preview versus production</strong>. A marketer tests a flow on ten contacts, it looks perfect, then it runs on 200,000 and behaves differently — a race between a delay node and a condition, a contact re-entering a flow twice. I decided early that the flow must be evaluated deterministically: same graph, same order, same result, every time. Cycles rejected at publish, not discovered at 2am.</p>
+<p>Second, <strong>segmentation speed</strong>. "Show me engaged Stockholm contacts from the last 30 days" took the better part of a minute on big accounts. Nobody builds campaigns with a tool that slow — they go back to spreadsheets. I spent a full sprint with query plans, covering indexes and a pre-computed attributes table until the same reports came back in about two seconds.</p>
+<p>Third, <strong>imports that never finish</strong>. A 500k-contact list import would run as one giant job, fail at 90%, and leave the list in a mystery state. I broke synchronisation into small idempotent chunks as Service Bus–triggered Azure Functions: any chunk can retry or resume, and re-running the whole import is safe by construction.</p>
+
+<div class="pull-quote">"Same graph, same order, same result — a marketer should be able to trust the canvas the way a pilot trusts the instruments."</div>
+
+<figure class="blog-fig">
+<img alt="Marketing performance dashboards on a laptop" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80" />
+<figcaption>Segmentation and reporting had to feel instant — this is where the two-second query budget came from.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>This is the heart of the builder: topological evaluation of the flow graph. Every node — trigger, delay, condition, action — runs in dependency order, delays are resolved against the contact's own timeline, and any cycle fails loudly at publish time instead of looping in production. The animated stats components and the editors all sit on top of this guarantee.</p>
+<pre class="code"><code><span class="c">// flow-engine.ts — deterministic evaluation of automation flows</span>
+<span class="c">// Same graph + same contact state = same result. Always.</span>
+<span class="k">type</span> NodeId = <span class="s">string</span>;
+<span class="k">interface</span> FlowNode {
+  id: NodeId;
+  kind: <span class="s">'trigger' | 'delay' | 'condition' | 'action'</span>;
+  next: NodeId[];
+  runAt?: <span class="s">string</span>; <span class="c">// resolved per contact, e.g. "2024-03-01T09:00Z"</span>
+}
+
+<span class="k">export function</span> orderNodes(nodes: FlowNode[]): FlowNode[] {
+  <span class="k">const</span> byId = <span class="k">new Map</span>&lt;<span class="s">string</span>, FlowNode&gt;(nodes.map(n =&gt; [n.id, n]));
+  <span class="k">const</span> visited = <span class="k">new Set</span>&lt;NodeId&gt;();
+  <span class="k">const</span> ordered: FlowNode[] = [];
+
+  <span class="k">const</span> visit = (id: NodeId, stack: NodeId[]): <span class="k">void</span> =&gt; {
+    <span class="k">if</span> (stack.includes(id)) {
+      <span class="k">throw new Error</span>(<span class="s">`Cycle rejected at publish: ${[...stack, id].join(' → ')}`</span>);
+    }
+    <span class="k">if</span> (visited.has(id)) <span class="k">return</span>;
+    visited.add(id);
+    <span class="k">for</span> (<span class="k">const</span> next of byId.get(id)?.next ?? []) visit(next, [...stack, id]);
+    ordered.unshift(byId.get(id)!);
+  };
+
+  nodes.forEach(n =&gt; visit(n.id, []));
+  <span class="k">return</span> ordered.sort(byScheduledTime); <span class="c">// delays resolved per contact</span>
+}</code></pre>
+<p>That little <span style="font-family:monospace">throw</span> on cycles is my favourite line in the whole codebase. It turned an entire class of 2am incidents into a red message in the editor, exactly where it belongs.</p>
+
+<h2>How it landed</h2>
+<p>By the time I left in early 2024, the builder was the daily driver for campaign creation — flows people actually trusted with launches. Segmentation reports that used to take ~40 seconds came back in ~2. Imports resumed instead of restarted. And the email, survey and page editors finally felt like one product instead of three cousins.</p>
+
+<h2>What I'd do differently</h2>
+<p>I would have versioned published flows from day one — immutable snapshots per publish, so a marketer could diff "what changed between Tuesday's send and today's". We approximated it with drafts, but true time-travel debugging would have been worth the storage.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">Vue 3</span><span class="tag-chip">TypeScript</span><span class="tag-chip">C# / .NET</span><span class="tag-chip">Azure Functions</span><span class="tag-chip">MSSQL</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="../projects.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Archive</span><span class="font-semibold">All projects</span></a>
+<a href="./ungapped-knockout-to-vue3-migration.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">KnockoutJS → Vue 3 migration</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Discuss a similar build</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>All Projects - Sergio Stankevich</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/layout.css" />
+    <link rel="stylesheet" href="./styles/components.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="antialiased">
+    <!-- BEGIN: Sticky Header -->
+    <header
+      class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-[#110e25]/80 backdrop-blur-md border-b border-white/10"
+      id="main-nav"
+    >
+      <div
+        class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4"
+      >
+        <a class="flex items-center gap-3" href="./index.html">
+          <span class="font-semibold text-lg text-white">Sergio</span>
+          <span class="text-green-500 font-bold">ships.</span>
+        </a>
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="./projects.html"
+            >All Projects</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="./index.html#how-i-work"
+            >How I Work</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="./index.html#about"
+            >About</a
+          >
+          <a
+            class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-scale"
+            href="./index.html#contact"
+            >Contact</a
+          >
+        </nav>
+        <!-- Mobile Burger -->
+        <button
+          class="md:hidden text-gray-300 hover:text-white icon-pulse"
+          id="mobile-menu-btn"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+    <!-- Mobile Menu Overlay -->
+    <div
+      class="fixed inset-0 bg-[#110e25] z-40 flex-col items-center justify-center flex menu-closed"
+      id="mobile-menu"
+    >
+      <div class="flex flex-col items-center gap-8 w-full px-8">
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="./projects.html"
+          >Projects</a
+        >
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="./index.html#how-i-work"
+          >How I Work</a
+        >
+        <a
+          class="text-2xl font-semibold text-white hover:text-gray-300 transition-colors mobile-link hover-scale"
+          href="./index.html#about"
+          >About</a
+        >
+        <a
+          class="mt-8 bg-white text-gray-900 font-semibold py-4 px-12 rounded-full hover:bg-gray-100 transition-colors mobile-link w-full text-center hover-scale"
+          href="./index.html#contact"
+          >Contact me</a
+        >
+      </div>
+      <button
+        class="absolute top-6 right-6 text-gray-300 hover:text-white icon-pulse"
+        id="close-menu-btn"
+      >
+        <svg
+          class="h-8 w-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 18L18 6M6 6l12 12"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          ></path>
+        </svg>
+      </button>
+    </div>
+    <!-- END: Sticky Header -->
+    <!-- BEGIN: Archive Hero -->
+    <section
+      class="hero-gradient text-white pt-32 pb-16 px-4 sm:px-6 lg:px-8 reveal active"
+    >
+      <div class="max-w-5xl mx-auto">
+        <a
+          class="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+          href="./index.html"
+          >← Back home</a
+        >
+        <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-6 tracking-tight">
+          All <span class="text-gradient">projects</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl leading-relaxed">
+          Everything I've shipped that's worth showing — SaaS platforms from my
+          years at Ungapped, plus client builds for restaurants, bars, a
+          brewery, a festival and two Belarus businesses. Click any card for
+          the full story.
+        </p>
+      </div>
+    </section>
+    <!-- END: Archive Hero -->
+    <!-- BEGIN: Projects Grid -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-[#fafafa] reveal active">
+      <div class="max-w-5xl mx-auto">
+        <projects-list
+          class="grid grid-cols-1 md:grid-cols-2 gap-8"
+        ></projects-list>
+      </div>
+    </section>
+    <!-- END: Projects Grid -->
+    <!-- BEGIN: Footer -->
+    <footer
+      class="bg-[#110e25] py-16 px-4 sm:px-6 lg:px-8 border-t border-white/10 text-sm text-gray-400 reveal active"
+    >
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="font-bold text-xl text-white">Sergio</span>
+            <span class="text-green-500 font-bold text-xl">ships.</span>
+          </div>
+          <p class="mb-6">
+            Sergio Stankevich, full-stack software engineer.<br />Professionally
+            building software since 2020.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-4">Business</h4>
+          <p class="mb-1">Sergio Stankevich</p>
+          <p class="mb-1">VAT ID: 9006041256</p>
+          <p class="mb-4">Stockholm, Sweden - Tallinn, Estonia</p>
+          <a
+            class="underline hover:text-white transition-colors"
+            href="mailto:sergio.stankevich@gmail.com"
+            >sergio.stankevich@gmail.com</a
+          >
+        </div>
+      </div>
+    </footer>
+    <!-- END: Footer -->
+    <script type="module" src="./scripts/main.js"></script>
+  </body>
+</html>

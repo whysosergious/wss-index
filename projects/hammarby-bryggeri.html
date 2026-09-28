@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>The batch that almost got away — Hammarby Bryggeri · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Hammarby Bryggeri</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Microbrewery · Hammarby Sjöstad, Stockholm · 2023 · 5 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">The batch that <span class="text-gradient">almost got away</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A Stockholm microbrewery where fermentation graphs itself, stuck batches page the brewer, and the excise-tax report writes itself from the batch ledger.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Freelance full-stack build</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">The head brewer showed me his system with genuine pride: a whiteboard, three notebooks, and a spreadsheet named something like FINAL_v7_really.xlsx. Fermentation readings went on the whiteboard when someone remembered. Recipes lived in the spreadsheet. And once a year, the excise-tax report got assembled the night before the deadline from all three, with the mood you'd expect. Then one spring, a batch stalled mid-fermentation and nobody noticed for two days. That was the batch that almost got away — and the reason this project exists.</p>
+<p>What we built is a brewery that watches itself. Gravity and temperature sensors push readings every minute into a time series. The brewer sees live fermentation curves per tank, gets paged when a batch flatlines above target, and gates packaging on QC checks. Packaged litres flow into strength bands, and the Swedish alkoholskatt report falls out of the ledger instead of out of a panic.</p>
+
+<figure class="blog-fig">
+<img alt="Beer glasses raised in a toast at the brewery" src="https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1200&q=80" />
+<figcaption>What the drinker sees. Behind every glass: a batch ledger, a curve, and a QC gate.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Track every batch from grain to glass: recipe versions you can actually diff, live fermentation monitoring, quality-control workflows before anything gets packaged, and excise reporting the tax office would accept without questions. Brewers should brew; paperwork should write itself.</p>
+
+<h2>What kept me up at night</h2>
+<p>First, <strong>silent stalls</strong>. A stuck fermentation doesn't announce itself — the beer just quietly stops becoming beer, and every hour of delay risks the batch. The system had to notice flatlines on its own: gravity unmoved for 24 hours while still above target means the brewer's phone buzzes, day or night. That alert is the single most valuable notification I've ever shipped.</p>
+<p>Second, <strong>sensor data you can trust</strong>. Out-of-order points, gaps, a probe pulled for cleaning — time-series data is messy, and a pretty curve drawn from garbage is dangerous. Ingest is idempotent on batch plus timestamp, gaps get flagged instead of silently interpolated, and cleaning windows are excluded. The curve shows what happened, including the holes.</p>
+<p>Third, <strong>the tax report</strong>. Alkoholskatt bands by strength, litres packaged, audit-ready. This couldn't be a spreadsheet export someone edits — it aggregates straight from the batch ledger, so the number on the report and the number in the system are the same number by construction.</p>
+
+<div class="pull-quote">"A pretty curve drawn from garbage is dangerous. The graph shows what happened — including the holes."</div>
+
+<figure class="blog-fig">
+<img alt="Beer taps pouring at the brewery taproom" src="https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?w=1200&q=80" />
+<figcaption>From tank to tap: only batches that passed QC ever reach these handles.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>The ingest plus stall-watch pair. Sensor batches land idempotently in the time series, and every ingest runs the deviation check: is gravity moving, is temperature in range, and — the critical one — has this batch flatlined above its target? That last question is what would have saved the spring batch.</p>
+<pre class="code"><code><span class="c">// ferment.ts — ingest sensor data, watch for the stall nobody notices</span>
+<span class="k">export interface</span> Reading { ts: <span class="k">number</span>; sg: <span class="k">number</span>; tempC: <span class="k">number</span>; cleaning?: <span class="k">boolean</span> }
+
+<span class="k">export async function</span> ingest(batchId: <span class="s">string</span>, points: Reading[]) {
+  <span class="k">const</span> real = points.filter(p =&gt; !p.cleaning); <span class="c">// probes lie during cleaning</span>
+  <span class="k">const</span> lines = real.map(p =&gt;
+    <span class="s">`ferment,batch=${batchId} gravity=${p.sg},temp=${p.tempC} ${p.ts * 1e9}`</span>);
+  <span class="k">await</span> influx.write(lines); <span class="c">// idempotent on (batch, ts): replays are safe</span>
+
+  <span class="k">await</span> checkStall(batchId);
+  <span class="k">await</span> checkTempRange(batchId, real);
+}
+
+<span class="k">async function</span> checkStall(batchId: <span class="s">string</span>) {
+  <span class="k">const</span> day = <span class="k">await</span> influx.last24h(batchId); <span class="c">// gravity readings, newest last</span>
+  <span class="k">if</span> (day.length &lt; 10) <span class="k">return</span>; <span class="c">// not enough data to judge</span>
+
+  <span class="k">const</span> gravity = day.map(r =&gt; r.sg);
+  <span class="k">const</span> spread = Math.max(...gravity) - Math.min(...gravity);
+  <span class="k">const</span> target = <span class="k">await</span> db.targetFG(batchId);
+
+  <span class="k">if</span> (spread &lt; 0.001 &amp;&amp; gravity[gravity.length - 1] &gt; target) {
+    <span class="k">await</span> pageBrewer(batchId, <span class="s">`Stalled at SG ${gravity.at(-1)} (target ${target})`</span>);
+  }
+}</code></pre>
+<p>The <span style="font-family:monospace">length &lt; 10</span> guard matters more than it looks: a brand-new batch with three readings isn't stalled, it's just young. Alerting on that would have trained everyone to ignore the pager within a week.</p>
+
+<h2>How it landed</h2>
+<p>Sensor resolution went to one minute, and the whiteboard retired with honours. No lost batches in the year after launch — including one stall caught at 3am that would previously have been found on Monday. Excise-report prep went from a panicked evening to an export. And recipe versioning ended the FINAL_v7 era: every tweak has an author, a date and a reason.</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd put a cheap display on each tank showing its own curve. Brewers live by the tanks, not by dashboards — the information should meet them where they stand, in the cold room, with wet hands.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">React</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Node.js</span><span class="tag-chip">IoT</span><span class="tag-chip">InfluxDB</span><span class="tag-chip">Compliance</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./furnituraplus-fittings.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">FurnituraPlus fittings</span></a>
+<a href="./stockholm-beer-whiskey-festival.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">Beer &amp; Whiskey Festival</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Instrument my brewery</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

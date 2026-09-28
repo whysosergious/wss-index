@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>The two-minute close — Malt &amp; Barrel · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Malt &amp; Barrel</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Beer bar · Gamla Stan, Stockholm · 2023 · 5 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">The two-minute <span class="text-gradient">close</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A Gamla Stan beer bar where tabs open in seconds, regulars get recognised, Swish settles the bill, and closing takes two taps instead of twenty minutes.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Freelance full-stack build</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">I watched the Saturday close at Malt &amp; Barrel once, and once was enough. Paper slips spread across the bar, the card reader doing its little thinking dance, the bartender doing arithmetic that got more creative with every pint he'd served. Twenty minutes, with the last guests standing around watching their evening end in bookkeeping. The owner didn't ask for "a POS system". He asked: "can closing take two minutes?"</p>
+<p>So every design decision bent toward that number. Tabs became records, not slips — items, splits, Swish references, loyalty stamps, all attached. Members climbed bronze-silver-gold tiers without anyone stamping a card. And the tab only closes on a signed, verified PAID event from Swish, never on hope.</p>
+
+<figure class="blog-fig">
+<img alt="Drinks lined up on a dark bar counter" src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=1200&q=80" />
+<figcaption>Saturday at the bar — every glass on this counter is a line item that reconciles itself.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Open a tab in seconds, split it fairly between friends, pay by Swish (with BankID where identity matters), recognise regulars with tiers and stamps, and reconcile the evening to the öre in two taps. Swedish payments aren't a plugin here — they're the whole point, so Swish and BankID had to be first-class, not bolted on.</p>
+
+<h2>What kept me up at night</h2>
+<p>First, <strong>lost and double-charged tabs</strong>. Bar networks flake, staff double-tap, guests retry payments. If "pay" isn't idempotent, someone gets charged twice and tells everyone they know. The tab moves through a tiny state machine — open, pending, closed — where every transition carries an idempotency key. Retries are free; illegal jumps are impossible.</p>
+<p>Second, <strong>fake paid states</strong>. The scariest bug in any payment system is a tab that says "paid" when no money moved. So the close path only fires on a server-verified Swish callback with a matching reference and amount. The UI can show whatever spinners it likes; the ledger only listens to Swish.</p>
+<p>Third, <strong>loyalty that drifts</strong>. Stamp cards live in wallets, memories and arguments. Tiers computed live from the stamp ledger — one query, auditable, no parallel bookkeeping. A guest asking "how many stamps do I have?" gets the same number the bar sees.</p>
+
+<div class="pull-quote">"The ledger only listens to Swish. The UI can show whatever spinners it likes."</div>
+
+<figure class="blog-fig">
+<img alt="Guest paying by card at the counter" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80" />
+<figcaption>Pay, verify, close — the handshake the whole evening depends on.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>The payments module: tab transitions with idempotency keys, the Swish request with its reference, and the callback verification that is the only thing allowed to close a tab and award stamps. Read it as the answer to all three fears above — retries safe, paid states real, loyalty automatic.</p>
+<pre class="code"><code><span class="c">// payments.ts — the only path from "open tab" to "closed tab"</span>
+<span class="k">type</span> TabState = <span class="s">'open' | 'pending' | 'closed'</span>;
+<span class="k">interface</span> Tab { id: <span class="s">string</span>; total: <span class="k">number</span>; state: TabState; lastKey: <span class="s">string</span> | null }
+
+<span class="k">const</span> allowed: Record&lt;TabState, TabState[]&gt; = {
+  open: [<span class="s">'pending'</span>, <span class="s">'closed'</span>],
+  pending: [<span class="s">'closed'</span>, <span class="s">'open'</span>], <span class="c">// back to open if Swish fails</span>
+  closed: [],
+};
+
+<span class="k">export function</span> transition(tab: Tab, to: TabState, idemKey: <span class="s">string</span>): Tab {
+  <span class="k">if</span> (tab.lastKey === idemKey) <span class="k">return</span> tab; <span class="c">// double-tap? already done.</span>
+  <span class="k">if</span> (!allowed[tab.state].includes(to)) <span class="k">throw new Error</span>(<span class="s">`Illegal ${tab.state} → ${to}`</span>);
+  <span class="k">return</span> { ...tab, state: to, lastKey: idemKey };
+}
+
+<span class="k">export async function</span> requestSwish(tab: Tab, payerAlias: <span class="s">string</span>) {
+  <span class="k">const</span> ref = <span class="s">`MB-${tab.id}-${Date.now()}`</span>; <span class="c">// unique per attempt</span>
+  <span class="k">await</span> swishApi.createPayment({
+    payeeAlias: process.env.SWISH_MERCHANT!,
+    amount: tab.total, payerAlias, message: <span class="s">`Malt&Barrel tab ${tab.id}`</span>,
+  });
+  <span class="k">return</span> transition(tab, <span class="s">'pending'</span>, ref);
+}
+
+<span class="c">// The ONLY closer: a verified Swish callback. Nothing else may call this.</span>
+<span class="k">export function</span> onSwishPaid(tab: Tab, cb: { ref: <span class="s">string</span>; amount: <span class="k">number</span>; sigOk: <span class="k">boolean</span> }) {
+  <span class="k">if</span> (!cb.sigOk || cb.amount !== tab.total) <span class="k">throw new Error</span>(<span class="s">'Unverified payment'</span>);
+  awardStamps(tab); <span class="c">// loyalty lands exactly when money does</span>
+  <span class="k">return</span> transition(tab, <span class="s">'closed'</span>, cb.ref);
+}</code></pre>
+<p>Notice the stamps ride inside the verified close. That ordering — money first, loyalty second, same function — is what makes "where are my stamps?" arguments impossible.</p>
+
+<h2>How it landed</h2>
+<p>The close takes about two minutes now, and it matches to the öre — the owner checked obsessively for the first month and then stopped checking, which is the real review. Returning members are up by about a third, because the bar finally recognises them back. And nobody has been double-charged since launch, which in bar software is the statistic that matters.</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd add bill-splitting by item from the start instead of by amount. Groups always want "I had the IPA and half the fries", and amount-splits cause exactly the bar-counter negotiations software should end.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">React</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Node.js</span><span class="tag-chip">Swish API</span><span class="tag-chip">BankID</span><span class="tag-chip">Loyalty</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./hop-yard-pub.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">The Hop Yard pub</span></a>
+<a href="./potolokmaster-ceilings.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">PotolokMaster ceilings</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Modernise my bar</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Rewriting the plane mid-flight — KnockoutJS to Vue 3 · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">KnockoutJS → Vue 3</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Ungapped · Stockholm · 2022 – 2023 · 5 min read</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Rewriting the plane <span class="text-gradient">mid-flight</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">How we moved a large marketing platform off KnockoutJS without freezing releases — one route at a time, with both frameworks living side by side for months.</p>
+<p class="text-sm text-gray-400 mt-6">By Sergio Stankevich · Full-stack developer, Ungapped</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">Every legacy codebase has a moment where adding a button takes a week and everyone just… accepts it. For our KnockoutJS frontend, that moment had arrived by 2022. Viewmodels hundreds of lines long, observables subscribing to observables, nobody able to say what re-renders when. New developers needed weeks just to stop being afraid of it. I led the migration to Vue 3 — and the rule from day one was: the product ships every week, migration or not.</p>
+<p>That rule killed the obvious approach. No big-bang rewrite, no feature freeze, no "we'll be back in six months with something beautiful". Instead we did the strangler-fig thing for real: the old Knockout shell learned to mount new Vue islands, and route by route, the islands took over until there was nothing left to strangle.</p>
+
+<figure class="blog-fig">
+<img alt="Source code on a dark editor screen" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80" />
+<figcaption>Home turf for most of 2022 — two frameworks, one page, zero drama if we got the boundaries right.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Replace a large KnockoutJS codebase with Vue 3 + TypeScript: Composition API, Pinia stores, typed props, virtualised lists for the 50k-row grids. Cut the time it takes to add features, make performance predictable, and get onboarding from weeks down to days. All while the marketing platform kept releasing.</p>
+
+<h2>What kept me up at night</h2>
+<p>The scary part was never Vue — Vue is lovely. It was the <strong>in-between months</strong>, when a single page had a Knockout viewmodel owning state that a new Vue component also needed. Two reactivity systems, one truth. Get that wrong and you get the worst kind of bug: the screen shows one thing, the save sends another, and nobody can reproduce it twice.</p>
+<p>The second fear was subtler: <strong>migrating the shape of the code, not just the syntax</strong>. A line-by-line translation of a 600-line viewmodel gives you a 600-line composable nobody understands either. Each route got a small redesign pass — what state is actually shared, what can be local, what can be derived — before a single line was ported.</p>
+<p>And third, <strong>the long tail</strong>. Migrations die at 80%: the last weird reports page nobody wants to touch. We kept a visible checklist per route and made "delete 500 lines of Knockout" a legitimate sprint ticket. Deleting code should feel like progress, because it is.</p>
+
+<div class="pull-quote">"The migration is done not when the new code works, but when the old code is gone. Plan the funerals too."</div>
+
+<figure class="blog-fig">
+<img alt="Laptop with code on screen during migration work" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80" />
+<figcaption>Route by route, the Vue islands grew and the Knockout shell shrank — releases never stopped.</figcaption>
+</figure>
+
+<h2>The piece of code that saved us</h2>
+<p>This bridge is what made the in-between months survivable. A Knockout observable mirrors into a Vue ref, both directions, with subscriptions torn down when the component unmounts — so old and new code share one source of truth without either framework knowing the other exists. The host wrapper below it is how a legacy route mounts a Vue island inside a Knockout template.</p>
+<pre class="code"><code><span class="c">// ko-vue-bridge.ts — one truth, two reactivity systems</span>
+<span class="k">import</span> { ref, watch, onUnmounted, createApp, h } <span class="k">from</span> <span class="s">'vue'</span>;
+
+<span class="k">export function</span> useKnockout&lt;T&gt;(koObservable: <span class="k">any</span>) {
+  <span class="k">const</span> state = ref&lt;T&gt;(koObservable());
+
+  <span class="c">// Knockout → Vue: keep the ref in sync</span>
+  <span class="k">const</span> subscription = koObservable.subscribe((v: T) =&gt; {
+    state.value = v;
+  });
+
+  <span class="c">// Vue → Knockout: write back only on real change (no echo loops)</span>
+  <span class="k">const</span> stop = watch(state, (v) =&gt; {
+    <span class="k">if</span> (koObservable() !== v) koObservable(v);
+  });
+
+  onUnmounted(() =&gt; {
+    subscription.dispose(); <span class="c">// leaked subscriptions were bug #1 in dev</span>
+    stop();
+  });
+
+  <span class="k">return</span> state;
+}
+
+<span class="c">// KoHost — mount a Vue island inside a legacy Knockout template</span>
+<span class="k">export function</span> mountIsland(el: HTMLElement, component: <span class="k">any</span>, props: <span class="k">object</span>) {
+  <span class="k">const</span> app = createApp({ render: () =&gt; h(component, props) });
+  app.mount(el);
+  <span class="k">return</span> () =&gt; app.unmount(); <span class="c">// called by the outgoing route</span>
+}</code></pre>
+<p>The <span style="font-family:monospace">koObservable() !== v</span> guard looks paranoid until you've debugged your first infinite echo loop at midnight. Then it looks like the most important line in the file.</p>
+
+<h2>How it landed</h2>
+<p>Routes flipped one by one with zero freeze releases. Feature work got roughly twice as fast to scope — typed props and small composables instead of archaeology. The big grids stopped janking thanks to windowing. And onboarding a new developer went from "read these viewmodels and pray" to "here are the stores, here's the pattern".</p>
+
+<h2>What I'd do differently</h2>
+<p>I'd record a five-minute video per migrated route explaining what the old code did and why the new shape differs. We wrote docs, but video would have carried the reasoning — the part that actually rots.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">Vue 3</span><span class="tag-chip">KnockoutJS</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Vite</span><span class="tag-chip">Architecture</span>
+</div>
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./ungapped-marketing-automation-builder.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">← Previous story</span><span class="font-semibold">Marketing automation builder</span></a>
+<a href="./bistro-sodra-restaurant.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next story →</span><span class="font-semibold">Bistro Södra restaurant</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Plan your migration</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

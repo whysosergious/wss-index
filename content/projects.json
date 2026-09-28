@@ -1,34 +1,105 @@
 [
   {
-    "title": "n8n Verified Community Node — EU VAT Validation in Workflows",
-    "date": "August 4, 2024",
-    "description": "Verified n8n node that performs VAT validation and... It helps companies automate their tax compliance by checking VAT numbers against official databases in real-time.",
-    "tags": [
-      "Typescript",
-      "Next.js",
-      "n8n",
-      "Node-RED",
-      "Cloud Automation"
-    ],
+    "title": "Marketing Automation Builder — Ungapped",
+    "date": "March 2021 – February 2024",
+    "description": "Drag-and-drop marketing automation builder handling complex user flows and high-volume data, used daily for campaign creation and orchestration. Includes email, survey and page editors plus campaign analytics.",
+    "tags": ["Vue 3", "TypeScript", "C#", ".NET", "MSSQL", "Azure Functions"],
     "image": {
-      "src": "https://lh3.googleusercontent.com/aida-public/AB6AXuA6Q8F7zeWnBhDuC0lT6HfJNe5BGH_QqQxA39Ph9T1yCIHL6cm2vYfg4ALLB82dZwa7Et6PxqctbGNs8rxc_SB8-mCXhA6OZR6Bi0g7uSW1bqJbTJs_iW0tnSjdgtbzREnKD0o6aqFVcQPK-K9oy7uKIWMragsWc5mis0sm-ZnQbOZGvqVeTneAUH0lVVEgq56DFydE5yIW-CpNd_FN0L1a6AAmED6-h8uU888SxVon5rm3lVmnyF6z",
-      "alt": "n8n Workflow"
-    }
+      "src": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+      "alt": "Marketing automation builder analytics dashboard"
+    },
+    "slug": "ungapped-marketing-automation-builder",
+    "featured": true
   },
   {
-    "title": "pi.pi.ee — B2B Deal & Document Portal",
-    "date": "July 2, 2024",
-    "description": "Internal entrepreneur platform; wholesale dealt to a number of users; supervision: problems, reviews, recommendations, logging, list, B2B and more.",
-    "tags": [
-      "Next.js",
-      "Zod",
-      "Typescript",
-      "Drizzle",
-      "PostgreSQL"
-    ],
+    "title": "Legacy Migration: KnockoutJS → Vue 3 — Ungapped",
+    "date": "2022 – 2023",
+    "description": "Led migration of a large KnockoutJS codebase to Vue 3, simplifying architecture, improving performance and cutting time to add new features across the marketing platform.",
+    "tags": ["Vue 3", "KnockoutJS", "TypeScript", "Architecture", "Legacy Migration"],
     "image": {
-      "src": "https://lh3.googleusercontent.com/aida-public/AB6AXuAiD_hyUns2W-P7Ng8IYzthg5Zsg8MEVP-yioQrdaYy77tJNrOKdBJBEsmFI7An2zXkJFTHbI6eKhuGCTpLclB46lMyxd3d3LztZJDURT6H3XrXTiGxP8gSkEuQVqPLIGv_6ZCcvr8qnbQmL5xCph57JBo0IwZo-LJZ4AVpg_DYPBicATTH6wEhmYMXCVISou1zgIZj20u46IMgbv-0Pl8fodnV6wbRvdubIU6P279nVHV8c8jNQPmF",
-      "alt": "Portal Dashboard"
-    }
+      "src": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
+      "alt": "Code migration architecture"
+    },
+    "slug": "ungapped-knockout-to-vue3-migration",
+    "featured": true
+  },
+  {
+    "title": "Bistro Södra — Restaurant Ordering & Management",
+    "date": "2023 · Södermalm, Stockholm",
+    "description": "Full-stack platform for a Stockholm restaurant: table reservations, QR-code menu ordering, kitchen display system and POS integration. Cut order errors by 85% and table turnover time by 20%.",
+    "tags": ["React", "TypeScript", "Node.js", "PostgreSQL", "WebSockets", "POS"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+      "alt": "Restaurant dining room in Stockholm"
+    },
+    "slug": "bistro-sodra-restaurant",
+    "featured": true
+  },
+  {
+    "title": "The Hop Yard — Craft Beer Pub Taproom System",
+    "date": "2022 · Södermalm, Stockholm",
+    "description": "Taproom management for a Stockholm craft beer bar: real-time keg tracking, inventory automation, Untappd sync and a live customer beer menu with availability.",
+    "tags": ["Vue 3", "TypeScript", "Node.js", "PostgreSQL", "Untappd API", "Real-time"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80",
+      "alt": "Craft beer pub interior with taps"
+    },
+    "slug": "hop-yard-pub"
+  },
+  {
+    "title": "Malt & Barrel — Beer Bar POS & Loyalty",
+    "date": "2023 · Gamla Stan, Stockholm",
+    "description": "POS and loyalty system for a Stockholm beer bar: tab management, membership tiers, automated reorder alerts and Swish + BankID payments.",
+    "tags": ["React", "TypeScript", "Node.js", "Swish API", "BankID", "Loyalty"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80",
+      "alt": "Beer bar counter with drinks"
+    },
+    "slug": "malt-barrel-bar"
+  },
+  {
+    "title": "PotolokMaster — Stretch Ceiling Renovation Platform",
+    "date": "2021 · Minsk, Belarus",
+    "description": "Business platform for a suspended-ceiling renovation company: instant price calculator, crew scheduling, client portal with progress photos and automated invoicing.",
+    "tags": ["React", "TypeScript", "Node.js", "PostgreSQL", "PDF", "Scheduling"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80",
+      "alt": "Renovation work in progress"
+    },
+    "slug": "potolokmaster-ceilings"
+  },
+  {
+    "title": "FurnituraPlus — Furniture Fittings B2B E-commerce",
+    "date": "2022 · Minsk, Belarus",
+    "description": "B2B e-commerce for a furniture-fittings reseller: 15,000+ SKUs with variants, tiered trade pricing, ERP integration and automated reorder recommendations.",
+    "tags": ["Next.js", "TypeScript", "PostgreSQL", "ERP", "B2B E-commerce", "Pricing Engine"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80",
+      "alt": "Furniture showroom with fittings"
+    },
+    "slug": "furnituraplus-fittings"
+  },
+  {
+    "title": "Hammarby Bryggeri — Brewery Operations Platform",
+    "date": "2023 · Hammarby Sjöstad, Stockholm",
+    "description": "Brewery management for a Stockholm microbrewery: batch tracking, fermentation monitoring with IoT sensors, recipe versioning, QC workflows and Swedish excise-tax reporting.",
+    "tags": ["React", "TypeScript", "Node.js", "IoT", "InfluxDB", "Compliance"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=800&q=80",
+      "alt": "Brewery beer glasses"
+    },
+    "slug": "hammarby-bryggeri"
+  },
+  {
+    "title": "Stockholm Beer & Whiskey Festival — Event Platform",
+    "date": "2024 · Stockholm",
+    "description": "Festival platform for Stockholm Beer & Whiskey Festival: tiered ticketing, exhibitor portal, interactive venue map, real-time tap list with ratings and analytics dashboard.",
+    "tags": ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Real-time", "Analytics"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=800&q=80",
+      "alt": "Beer tasting flight at the festival"
+    },
+    "slug": "stockholm-beer-whiskey-festival",
+    "featured": true
   }
 ]
