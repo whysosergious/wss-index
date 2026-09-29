@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>One page, one trade, one phone number — Contact Card Sites · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Contact Card Sites</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Local trades</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">One page, one trade, <span class="text-gradient">one number</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A small batch of single-page sites for plumbers, electricians and carpenters: real photos, a real service area, tap-to-call, and a vCard that saves the details to a phone. One template underneath, each site owned by the person it belongs to.</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">The brief was always the same and almost always the same six questions: who are you, what do you do, where do you work, how do I reach you, and can I see proof you exist. Most of these people had either nothing online or a page from 2011 built by a cousin, loading slowly and telling nobody where they actually worked.</p>
+<p>So I stopped treating each site as a project and started treating it as a template with four editable variables. One page, no framework runtime, no build step, no hosting bill beyond a domain — and an owner who can change their own phone number in a text file without asking me.</p>
+
+<figure class="blog-fig">
+<img alt="Contact details on a letterboard" src="https://images.unsplash.com/photo-1528747045269-390fe33c19f2?w=1200&q=80" />
+<figcaption>Everything a customer needs before deciding to pick up the phone.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>A page that loads instantly on a phone with one bar of signal, shows the work rather than stock photography, and makes calling the easiest possible action. Plus the small things that quietly decide whether it's found at all: a title that names the trade and the town, a local service-area list, and a vCard download.</p>
+
+<h2>Why one page was enough</h2>
+<p>Nearly every site I was replacing had a nav bar with five items and four of them were empty. Stripping it back was the most useful thing I did: one page that answers everything, with a call button that is a real <span style="font-family:monospace">tel:</span> link so it works from the search result, not only from the page.</p>
+<p>The other decision was to make the sites <strong>static and owned</strong>. No CMS, no database, no login. The content lives in the repository, the owner gets push access, and a site that is a handful of files cannot be slow, cannot be hacked into a spam server, and cannot need me to keep it alive. If the owner stops wanting it, deleting it is one <span style="font-family:monospace">git rm</span>.</p>
+
+<div class="pull-quote">"A page that answers every question on one screen beats a five-item navigation bar with four empty pages."</div>
+
+<h2>The piece of code that saved us</h2>
+<p>Not the design — the build. The whole template compiles to a folder of static files, which means a new trade is a data file, not a project. Everything the owner can change is a field; everything I control is in the template and never appears in their copy.</p>
+<pre class="code"><code><span class="c">// build.mjs — a trade is a data file, not a project</span>
+<span class="k">import</span> { readFile, writeFile } <span class="k">from</span> <span class="s">"node:fs/promises"</span>;
+
+<span class="k">const</span> SITE = {
+  name: <span class="s">"Erik Lindqvist"</span>,
+  trade: <span class="s">"Electrician"</span>,
+  phone: <span class="s">"+46 70 123 45 67"</span>,
+  areas: [<span class="s">"Hammarby Sjöstad"</span>, <span class="s">"Södermalm"</span>, <span class="s">"Djurgården"</span>],
+  works: [<span class="s">"img/panel-1.jpg"</span>, <span class="s">>"img/panel-2.jpg"</span>],  <span class="c">// real jobs, real photos</span>
+};
+
+<span class="k">const</span> vcard = [
+  <span class="s">'BEGIN:VCARD'</span>, <span class="s">'VERSION:3.0'</span>,
+  <span class="s">`FN:${SITE.name}`</span>, <span class="s">`TEL;TYPE=CELL:${SITE.phone}`</span>,
+  <span class="c">'END:VCARD'</span>, <span class="s">''</span>,              <span class="c">// trailing newline: some phones need it</span>
+].join(<span class="s">'\r\n'</span>);
+
+<span class="k">await</span> writeFile(<span class="s">"dist/${slug}/contact.vcf"</span>, vcard);
+<span class="k">await</span> writeFile(<span class="s">"dist/${slug}/index.html"</span>, render(SITE));
+
+<span class="c">// The title is the whole SEO strategy, so it's generated, not typed.</span>
+<span class="k">const</span> title = <span class="s">`${SITE.trade} in ${SITE.areas[0]} — ${SITE.name}`</span>;</code></pre>
+<p>Generating the page title from the trade and the first service area is the entire search strategy. It is also the thing every hand-rolled one-pager gets wrong, because a title of "Home" tells nobody anything.</p>
+
+<h2>How it landed</h2>
+<p>Calls started coming from the first hour the pages went live, because a page with a tap-to-call button removes a step. Load times dropped from multi-second to instant on mobile data, and the owners can change their details themselves — which, for work this small, is the difference between a site that stays correct and a site that quietly shows a phone number from 2022.</p>
+
+<h2>What I'd do differently</h2>
+<p>I would have asked for a written list of recent jobs on day one. Photos were the bottleneck in every single build, and I lost more time chasing images than writing markup. Getting them before the first meeting is the entire lesson.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">HTML</span><span class="tag-chip">CSS</span><span class="tag-chip">JavaScript</span><span class="tag-chip">SEO</span><span class="tag-chip">vCard</span>
+</div>
+
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./stockroom-inventory.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">&larr; Previous</span><span class="font-semibold">Stockroom inventory</span></a>
+<a href="../index.html#contact" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next step</span><span class="font-semibold">Get in touch</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Discuss a similar project</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

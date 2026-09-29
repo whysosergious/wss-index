@@ -36,33 +36,34 @@ class ProjectCard extends HTMLElement {
 
     this.className = CARD_CLASSES;
     this.innerHTML = `
-            <a
-              href="./projects/${escapeHtml(slug)}.html"
-              class="flex flex-col h-full text-decoration-none text-inherit"
-            >
-              <div class="aspect-video w-full overflow-hidden">
-                <img
-                  alt="${escapeHtml(image.alt)}"
-                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  src="${escapeHtml(image.src)}"
-                />
-              </div>
-              <div class="p-6 flex flex-col flex-grow">
-                <div class="flex justify-between items-start mb-4">
-                  <h3 class="text-xl font-bold text-gray-900 leading-tight">${escapeHtml(project.title)}</h3>
-                </div>
-                <p class="text-xs text-gray-400 mb-4">${escapeHtml(project.date)}</p>
-                <p class="text-gray-600 mb-6 leading-relaxed text-sm flex-grow">${escapeHtml(project.description)}</p>
-                <div class="flex flex-wrap gap-2">
-                  ${tags
-                    .map(
-                      (tag) =>
-                        `<span\n                  class="${TAG_CLASSES}"\n                  >${escapeHtml(tag)}</span\n                >`
-                    )
-                    .join("\n                ")}
-                </div>
-              </div>
-            </a>`;
+      <a
+        href="./projects/${escapeHtml(slug)}.html"
+        class="flex flex-col h-full text-decoration-none text-inherit"
+      >
+        <div class="aspect-video w-full overflow-hidden">
+          <img
+            alt="${escapeHtml(image.alt)}"
+            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            src="${escapeHtml(image.src)}"
+          />
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+          <h3 class="text-xl font-bold text-gray-900 leading-tight mb-3">
+            ${escapeHtml(project.title)}
+          </h3>
+          <p class="text-gray-600 mb-6 leading-relaxed text-sm flex-grow">
+            ${escapeHtml(project.description)}
+          </p>
+          <div class="flex flex-wrap gap-2">
+            ${tags
+              .map(
+                (tag) =>
+                  `<span class="${TAG_CLASSES}">${escapeHtml(tag)}</span>`,
+              )
+              .join("")}
+          </div>
+        </div>
+      </a>`;
   }
 }
 

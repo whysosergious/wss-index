@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>The stocktake nobody dreads — Stockroom · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Stockroom</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Wholesale supply</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">The stocktake <span class="text-gradient">nobody dreads</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">A phone camera that reads barcodes, stock levels that stay honest across two locations, and reorder points that raise their own purchase orders instead of waiting to be noticed.</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">Stock control at a small wholesaler is a counting problem wearing a costume. The goods are barcoded, the shelves are labelled, and yet the number in the system and the number on the shelf disagree constantly — because every movement between the warehouse, the van and the customer is a note somebody makes in the wrong place. The count itself is the easy bit. It's the twelve hours before the count that are dishonest.</p>
+<p>Stockroom makes the movements the source of truth. Scan on the way out, scan on the way in, and the level is whatever those scans say it is. Counting stops being an event and becomes a byproduct. The scanner is the phone already in the person's pocket, because buying dedicated hardware for a problem a browser camera can solve is not a decision I'd defend.</p>
+
+<figure class="blog-fig">
+<img alt="Warehouse shelving with stock totes" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=80" />
+<figcaption>Two locations, one number per SKU, and no end-of-quarter mystery.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Live stock per SKU per location, movements captured by scanning rather than remembered, low stock that becomes a draft purchase order on its own, and a stocktake screen that a person can use standing up, in a cold room, wearing gloves.</p>
+
+<h2>Counting in a cold room</h2>
+<p>The design constraint that shaped everything else was the phone in one hand and a box in the other. That rules out tiny tap targets, ruled-out data entry, and any flow that needs precision. It also rules out the classic mistake: making the stocktake a form. So a stocktake is a list you swipe through, and the only question asked per line is <em>count or not</em> — the number comes from the scanner, and a line with no barcode can still be counted by searching its name.</p>
+<p>The second real problem is <strong>two locations</strong>. A van is a location. Stock moves warehouse → van → customer, and the van's stock is the number everyone gets wrong. Treating the van as a stock location instead of an exception made the awkward part ordinary.</p>
+
+<div class="pull-quote">"The scanner is the phone in the pocket. Buying dedicated hardware for something a browser camera can do is a decision I wouldn't defend."</div>
+
+<h2>The piece of code that saved us</h2>
+<p>Stock is never stored and then adjusted. It is a projection of movements, which means it can't drift away from the movements that produced it.</p>
+<pre class="code"><code><span class="c">// stock.ts — a level is a projection of movements, never a stored number</span>
+<span class="k">export async function</span> stockAt(sku: <span class="s">string</span>, locationId: <span class="s">string</span>) {
+  <span class="k">const</span> { rows } = <span class="k">await</span> db.query(
+    <span class="s">`SELECT COALESCE(SUM(delta), 0) AS on_hand
+       FROM movements
+      WHERE sku = $1 AND location_id = $2`</span>,
+    [sku, locationId],
+  );
+  <span class="k">return</span> <span class="s">Number</span>(rows[0].on_hand);
+}
+
+<span class="k">export async function</span> raisePurchaseOrders() {
+  <span class="c">// Reorder point and pack size live on the product, not in someone's head.</span>
+  <span class="k">const</span> low = <span class="k">await</span> db.query(
+    <span class="s">`SELECT p.sku, p.reorder_point, p.pack_size,
+            SUM(m.delta) AS on_hand
+       FROM products p
+       JOIN movements m ON m.sku = p.sku AND m.location_id = $1
+      GROUP BY p.sku, p.reorder_point, p.pack_size
+     HAVING SUM(m.delta) &lt;= p.reorder_point`</span>,
+    [WAREHOUSE_ID],
+  );
+
+  <span class="k">for</span> (<span class="k">const</span> row <span class="k">of</span> low.rows) {
+    <span class="k">const</span> shortfall = row.reorder_point * 2 - row.on_hand;
+    <span class="c">// Round up to whole packs — suppliers sell packs, not units.</span>
+    <span class="k">const</span> qty = Math.ceil(shortfall / row.pack_size) * row.pack_size;
+    <span class="k">await</span> purchaseOrders.draft({ sku: row.sku, qty });
+  }
+}</code></pre>
+<p>Because the level is a sum rather than a value, a bad scan is a mistake you can find. Because the reorder is a function of that sum, a forgotten reorder is a mistake that can't happen twice.</p>
+
+<h2>How it landed</h2>
+<p>Stock numbers stopped being a quarterly surprise. Purchase drafts appear before the shelf is empty instead of after a customer asks. And the stocktake, which used to be a locked room and a clipboard, is now a person walking the aisles on a phone.</p>
+
+<h2>What I'd do differently</h2>
+<p>I would have put the van scan in the driver's normal route from the start. Letting a load leave the warehouse unsanned "just this once" cost me a real argument with a number I couldn't reconstruct.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">React</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Node.js</span><span class="tag-chip">PostgreSQL</span><span class="tag-chip">Barcode</span>
+</div>
+
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./invoice-automation.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">&larr; Previous</span><span class="font-semibold">Invoice automation</span></a>
+<a href="./contact-card-sites.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next &rarr;</span><span class="font-semibold">Contact card sites</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Discuss a similar project</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

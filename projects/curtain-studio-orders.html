@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Nobody retypes a curtain order — Curtain Studio · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Curtain Studio</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Made-to-measure workshop</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Nobody retypes a <span class="text-gradient">curtain order</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">Two people used to handle every made-to-measure order by hand — reading dimensions, sketching the shape, pricing it, and emailing a quote. Now the customer configures the curtain, and the order does the rest on its own.</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">Made-to-measure curtains are not hard because of the fabric. They are hard because of the paperwork. Every order arrived as an email with a half-finished sentence in it, then one person measured, another sketched, someone else typed the numbers into a spreadsheet and guessed a price. The workshop was good. The process around it was pure retyping, and every retyping was a chance to be wrong by ten centimetres.</p>
+<p>What replaced it is boring in the best way. The customer picks a style, enters their wall and window measurements, and the site returns a price. Once they pay, everything downstream happens without a human: a scaled drawing goes to the plotter, a job card appears for the seamstress, PostNord gets a label, the invoice is issued, and the customer's account shows the order moving.</p>
+
+<figure class="blog-fig">
+<img alt="Living room with made-to-measure curtains" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80" />
+<figcaption>The product is a curtain. Everything around it used to be manual.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>Take the manual order handling out of the loop without taking the customer out of the conversation. Self-service configuration and quoting on the site, and a pipeline behind it that never asks anyone to re-enter a number that already exists somewhere else.</p>
+
+<h2>What it replaced</h2>
+<p>The first version was a spreadsheet with a contact form in front of it. It worked, which is the dangerous part — it looked fine until someone ordered a 214 cm drop, it was cut at 214 <em>and</em> the heading, and the return cost more than the curtain. From then on every measurement lives in the order, and every derived number — fabric drop, heading allowance, seam and hem, price — is calculated once, in one place, and read everywhere else.</p>
+<p>The second problem was the handoff. Orders used to be discussed over the phone, so the person cutting had context the system never saw. The job card is that context, written down: measurements, chosen fabric, hardware, delivery date, and a link to the customer's own notes.</p>
+
+<div class="pull-quote">"If a number can be derived, nobody should type it twice. Every extra typing is a place for a 10 cm mistake."</div>
+
+<h2>The piece of code that saved us</h2>
+<p>The measurement validator. Curtains are configured by customers, and customers round numbers — "about 210", "roughly two and a half metres". The validator turns a loose input into either a confirmed dimension or a question back to the customer, before anyone at the workshop sees it.</p>
+<pre class="code"><code><span class="c">// measurements.ts — loose customer input -&gt; confirmed dimensions</span>
+<span class="k">export function</span> resolveDrop(
+  raw: { poleCm: <span class="s">number</span>; requestedCm: <span class="s">number</span> },
+  fabric: { dropCm: <span class="s">number</span> },
+): { dropCm: <span class="s">number</span>; question?: <span class="s">string</span> } {
+  <span class="k">if</span> (raw.requestedCm &gt; poleCm - fabric.dropCm) {
+    <span class="k">return</span> {
+      dropCm: poleCm - fabric.dropCm,
+      question: <span class="s">'That drop is longer than the fabric allows. Shall I use the maximum instead?'</span>,
+    };
+  }
+
+  <span class="c">// Round to whole cm, but flag anything the customer is guessing at.</span>
+  <span class="k">const</span> dropCm = Math.floor(raw.requestedCm);
+  <span class="k">const</span> isGuess = Math.abs(dropCm - raw.requestedCm) &gt; 0.5 || dropCm % 5 !== 0;
+
+  <span class="k">return</span> {
+    dropCm,
+    ...(isGuess ? { question: <span class="s">`'${dropCm} cm' is unusual — can you measure the pole again?`</span> } : {}),
+  };
+}</code></pre>
+<p>That question costs the customer ten seconds and saves a return. Every question the site asks is one the workshop used to answer by making a phone call.</p>
+
+<h2>How it landed</h2>
+<p>Quotes come back in seconds instead of two days, and the workshop stopped starting days by reading email. The plotter file, the job card and the shipping label all come out of the same order record, so they cannot disagree with each other. Returns dropped to the ones caused by a wall that isn't straight, which is a measuring-tape problem rather than a software one.</p>
+
+<h2>What I'd do differently</h2>
+<p>I would have put a photo-upload step on the window early. Half the measurement disputes were never about the number — they were about a window frame that isn't where the customer thought it was.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">React</span><span class="tag-chip">TypeScript</span><span class="tag-chip">Node.js</span><span class="tag-chip">PDF</span><span class="tag-chip">PostNord</span><span class="tag-chip">Plotter</span>
+</div>
+
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./stockholm-beer-whiskey-festival.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">&larr; Previous</span><span class="font-semibold">Beer &amp; Whiskey Festival</span></a>
+<a href="./shipping-desk-labels.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next &rarr;</span><span class="font-semibold">Shipping Desk labels</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Discuss a similar project</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

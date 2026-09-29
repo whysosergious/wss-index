@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" style="scroll-behavior: smooth">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Forty parcels a day, forty minutes back — Shipping Desk · Sergio Stankevich</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="../styles/base.css" />
+<link rel="stylesheet" href="../styles/layout.css" />
+<link rel="stylesheet" href="../styles/components.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+.prose-blog p{margin-bottom:1.25rem;line-height:1.85;color:#374151}
+.prose-blog h2{font-size:1.6rem;font-weight:700;margin:2.75rem 0 1rem;color:#111827;letter-spacing:-0.01em}
+.prose-blog ul{margin:0 0 1.25rem 1.25rem;list-style:disc;color:#374151;line-height:1.85}
+.dropcap::first-letter{font-size:3.4em;float:left;line-height:.9;padding-right:.12em;font-weight:700;color:#111827}
+.pull-quote{border-left:4px solid #8b5cf6;padding:.25rem 0 .25rem 1.25rem;font-size:1.3rem;font-style:italic;color:#1f2937;margin:2.5rem 0;line-height:1.6}
+figure.blog-fig{margin:2.5rem 0}
+figure.blog-fig img{border-radius:1.5rem;border:1px solid #e5e7eb;box-shadow:0 20px 45px -20px rgba(17,14,37,.25);width:100%;object-fit:cover}
+figure.blog-fig figcaption{text-align:center;font-size:.8rem;color:#6b7280;margin-top:.75rem}
+pre.code{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1.25rem;overflow-x:auto;font-size:.8rem;line-height:1.65;margin:1.5rem 0}
+pre.code .c{color:#64748b}pre.code .k{color:#8b5cf6}pre.code .s{color:#86efac}
+.tag-chip{padding:.35rem .9rem;background:#f3f4f6;color:#374151;font-size:.75rem;font-weight:500;border-radius:9999px}
+</style>
+</head>
+<body class="antialiased">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#110e25]/90 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
+<a class="flex items-center gap-3" href="../index.html"><span class="font-semibold text-lg text-white">Sergio</span><span class="text-green-500 font-bold">ships.</span></a>
+<nav class="flex items-center gap-6"><a class="text-sm font-medium text-gray-300 hover:text-white" href="../projects.html">← All projects</a><a class="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline" href="../index.html#contact">Contact</a></nav>
+</div>
+</header>
+
+<section class="hero-gradient text-white pt-32 pb-14 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<a class="text-sm text-gray-400 hover:text-white transition-colors" href="../projects.html">All projects</a>
+<span class="text-gray-600 mx-2">/</span>
+<span class="text-sm text-gray-300">Shipping Desk</span>
+<p class="text-xs uppercase tracking-widest text-gray-400 mt-6 mb-4">Shipping automation</p>
+<h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">Forty parcels a day, <span class="text-gradient">forty minutes back</span></h1>
+<p class="text-gray-300 text-lg leading-relaxed">An online shop where every shipment is one action: the address gets checked, the carrier gets booked, the label comes out of the printer and the tracking number lands back on the order before the packing is finished.</p>
+</div>
+</section>
+
+<main class="bg-white">
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 prose-blog">
+<p class="dropcap">This shop sends somewhere between twenty and fifty parcels a day, and every single one of them used to cost five to seven minutes of someone's morning. Read the address off the order, check it by hand, look up the customer in the carrier's website, book the shipment, print a label, then update the order with a tracking number. Five systems, one human, and no way to tell afterwards whether any of it actually happened.</p>
+<p>Shipping is the perfect candidate for automation because it is the rare process where the rules are already written down — they are just written down in a carrier's API and in the habits of whoever did it first. My job was to make one action mean all five steps.</p>
+
+<figure class="blog-fig">
+<img alt="Parcel ready to be shipped" src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1200&q=80" />
+<figcaption>The only manual part left is putting the box on the belt.</figcaption>
+</figure>
+
+<h2>The goal</h2>
+<p>One click in the order screen that validates the address, books with the carrier, produces a printable label and writes the tracking number back — with a clear failure state whenever any of those steps can't be trusted.</p>
+
+<h2>The forty minutes nobody had</h2>
+<p>Two things made this harder than it looks. First, <strong>bad addresses are not rare and are not always wrong</strong>. "Second floor, back entrance" is not an invalid address, it's a note. Anything the validator can't resolve automatically gets flagged and held, never guessed — a parcel that arrives is worth more than a label that printed in half a second.</p>
+<p>Second, <strong>the carrier's API fails in boring ways</strong>. Rate limits, a five-second timeout, a service that is temporarily unavailable. None of those are errors you can show a customer, so every call is retried with backoff, and a shipment that can't be booked stays visibly unbooked in the order list instead of silently disappearing into a queue nobody watches.</p>
+
+<div class="pull-quote">"Never guess an address to make a label print faster. A slow shipment is a conversation; a parcel at the wrong house is a refund."</div>
+
+<h2>The piece of code that saved us</h2>
+<p>One endpoint that owns the whole sequence and records each step, so a half-finished shipment is a visible state rather than a mystery. The order table doesn't have a "shipped" boolean; it has a small state machine.</p>
+<pre class="code"><code><span class="c">// ship-order.ts — one call, five steps, every step recorded</span>
+<span class="k">type</span> ShipStep = <span class="s">'validating' | 'booking' | 'labelled' | 'done'</span>;
+
+<span class="k">export async function</span> shipOrder(orderId: <span class="s">string</span>) {
+  <span class="k">const</span> order = <span class="k">await</span> loadOrder(orderId);
+  <span class="k">const</span> check = <span class="k">await</span> validateAddress(order.address);
+
+  <span class="k">if</span> (!check.resolved) {
+    <span class="c">// Hold it. Do not book, do not print, do not guess.</span>
+    <span class="k">return</span> markOrder(orderId, <span class="s">'needs_address_review'</span>, check.notes);
+  }
+
+  <span class="k">const</span> booking = <span class="k">await</span> retry(() =&gt; carrier.book({
+    address: check.normalised,          <span class="c">// carrier's own form, not ours</span>
+    parcel: { weightG: order.weightG, ...order.dimensions },
+  }), { attempts: 3, backoffMs: 400 });
+
+  <span class="c">// Tracking goes back to the order before the label prints —</span>
+  <span class="c">// if the printer is down, the customer still has a number.</span>
+  <span class="k">await</span> saveTracking(orderId, booking.trackingNumber);
+  <span class="k">await</span> renderLabel(booking.labelUrl);
+
+  <span class="k">return</span> markOrder(orderId, <span class="s">'ready_to_post'</span>, booking);
+}</code></pre>
+<p>Writing the tracking number back before printing is the ordering decision I would defend hardest. Printers fail; carriers don't lose bookings. The customer gets a number either way.</p>
+
+<h2>How it landed</h2>
+<p>Shipping is now a single action that takes seconds, and the tracking number is on the order before the box is sealed. Address problems stopped being discovered three days later by a courier standing at the wrong door — they show up as a review task in the morning. Manual shipping work is effectively gone.</p>
+
+<h2>What I'd do differently</h2>
+<p>I would have built the label preview before the booking integration. I spent longer than I'd like to admit on a printer driver, and a label preview in the browser would have found most of it in an afternoon.</p>
+
+<div class="flex flex-wrap gap-2 mt-10">
+<span class="tag-chip">Node.js</span><span class="tag-chip">PostgreSQL</span><span class="tag-chip">Carrier API</span><span class="tag-chip">PDF</span><span class="tag-chip">Thermal Printing</span>
+</div>
+
+
+<div class="grid sm:grid-cols-2 gap-4 mt-12">
+<a href="./curtain-studio-orders.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">&larr; Previous</span><span class="font-semibold">Curtain Studio orders</span></a>
+<a href="./invoice-automation.html" class="border border-gray-200 rounded-2xl p-5 hover:border-gray-400 transition-colors text-right"><span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Next &rarr;</span><span class="font-semibold">Invoice automation</span></a>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<a href="../index.html#contact" class="bg-[#0b1021] text-white font-medium py-3 px-8 rounded-full text-center hover-scale">Discuss a similar project</a>
+</div>
+</article>
+</main>
+<footer class="bg-[#110e25] py-12 px-4 text-sm text-gray-400 border-t border-white/10"><div class="max-w-3xl mx-auto flex justify-between"><span><span class="font-bold text-white">Sergio</span> <span class="text-green-500 font-bold">ships.</span></span><a class="underline hover:text-white" href="mailto:sergio.stankevich@gmail.com">sergio.stankevich@gmail.com</a></div></footer>
+</body>
+</html>

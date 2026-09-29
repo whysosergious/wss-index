@@ -1,5 +1,7 @@
 import "./components/project-card.js";
 import "./components/projects-list.js";
+import "./components/contact-form.js";
+import "./components/contact-modal.js";
 
 // Mobile Menu Logic
 const mobileMenuBtn = document.getElementById("mobile-menu-btn");

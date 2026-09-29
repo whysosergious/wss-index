@@ -1,19 +1,17 @@
 [
   {
     "title": "Marketing Automation Builder — Ungapped",
-    "date": "March 2021 – February 2024",
     "description": "Drag-and-drop marketing automation builder handling complex user flows and high-volume data, used daily for campaign creation and orchestration. Includes email, survey and page editors plus campaign analytics.",
     "tags": ["Vue 3", "TypeScript", "C#", ".NET", "MSSQL", "Azure Functions"],
     "image": {
       "src": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-      "alt": "Marketing automation builder analytics dashboard"
+      "alt": "Marketing automation analytics dashboard"
     },
     "slug": "ungapped-marketing-automation-builder",
     "featured": true
   },
   {
     "title": "Legacy Migration: KnockoutJS → Vue 3 — Ungapped",
-    "date": "2022 – 2023",
     "description": "Led migration of a large KnockoutJS codebase to Vue 3, simplifying architecture, improving performance and cutting time to add new features across the marketing platform.",
     "tags": ["Vue 3", "KnockoutJS", "TypeScript", "Architecture", "Legacy Migration"],
     "image": {
@@ -25,7 +23,6 @@
   },
   {
     "title": "Bistro Södra — Restaurant Ordering & Management",
-    "date": "2023 · Södermalm, Stockholm",
     "description": "Full-stack platform for a Stockholm restaurant: table reservations, QR-code menu ordering, kitchen display system and POS integration. Cut order errors by 85% and table turnover time by 20%.",
     "tags": ["React", "TypeScript", "Node.js", "PostgreSQL", "WebSockets", "POS"],
     "image": {
@@ -37,7 +34,6 @@
   },
   {
     "title": "The Hop Yard — Craft Beer Pub Taproom System",
-    "date": "2022 · Södermalm, Stockholm",
     "description": "Taproom management for a Stockholm craft beer bar: real-time keg tracking, inventory automation, Untappd sync and a live customer beer menu with availability.",
     "tags": ["Vue 3", "TypeScript", "Node.js", "PostgreSQL", "Untappd API", "Real-time"],
     "image": {
@@ -48,7 +44,6 @@
   },
   {
     "title": "Malt & Barrel — Beer Bar POS & Loyalty",
-    "date": "2023 · Gamla Stan, Stockholm",
     "description": "POS and loyalty system for a Stockholm beer bar: tab management, membership tiers, automated reorder alerts and Swish + BankID payments.",
     "tags": ["React", "TypeScript", "Node.js", "Swish API", "BankID", "Loyalty"],
     "image": {
@@ -59,7 +54,6 @@
   },
   {
     "title": "PotolokMaster — Stretch Ceiling Renovation Platform",
-    "date": "2021 · Minsk, Belarus",
     "description": "Business platform for a suspended-ceiling renovation company: instant price calculator, crew scheduling, client portal with progress photos and automated invoicing.",
     "tags": ["React", "TypeScript", "Node.js", "PostgreSQL", "PDF", "Scheduling"],
     "image": {
@@ -70,7 +64,6 @@
   },
   {
     "title": "FurnituraPlus — Furniture Fittings B2B E-commerce",
-    "date": "2022 · Minsk, Belarus",
     "description": "B2B e-commerce for a furniture-fittings reseller: 15,000+ SKUs with variants, tiered trade pricing, ERP integration and automated reorder recommendations.",
     "tags": ["Next.js", "TypeScript", "PostgreSQL", "ERP", "B2B E-commerce", "Pricing Engine"],
     "image": {
@@ -81,7 +74,6 @@
   },
   {
     "title": "Hammarby Bryggeri — Brewery Operations Platform",
-    "date": "2023 · Hammarby Sjöstad, Stockholm",
     "description": "Brewery management for a Stockholm microbrewery: batch tracking, fermentation monitoring with IoT sensors, recipe versioning, QC workflows and Swedish excise-tax reporting.",
     "tags": ["React", "TypeScript", "Node.js", "IoT", "InfluxDB", "Compliance"],
     "image": {
@@ -92,7 +84,6 @@
   },
   {
     "title": "Stockholm Beer & Whiskey Festival — Event Platform",
-    "date": "2024 · Stockholm",
     "description": "Festival platform for Stockholm Beer & Whiskey Festival: tiered ticketing, exhibitor portal, interactive venue map, real-time tap list with ratings and analytics dashboard.",
     "tags": ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Real-time", "Analytics"],
     "image": {
@@ -101,5 +92,55 @@
     },
     "slug": "stockholm-beer-whiskey-festival",
     "featured": true
+  },
+  {
+    "title": "Curtain Studio — Configured Orders to Cut Files",
+    "description": "Order pipeline for a made-to-measure curtain workshop. Customers configure their own curtains and the order runs itself: measured drawing to the plotter, sewing job card, PostNord shipping, invoice.",
+    "tags": ["React", "TypeScript", "Node.js", "PDF", "PostNord", "Plotter"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80",
+      "alt": "Living room with made-to-measure curtains"
+    },
+    "slug": "curtain-studio-orders"
+  },
+  {
+    "title": "Shipping Desk — Labels, Bookings & Tracking",
+    "description": "Shipping automation for an online shop sending 20–50 parcels a day. One call validates the address, books the carrier, prints a thermal label and writes tracking back to the order.",
+    "tags": ["Node.js", "PostgreSQL", "Carrier API", "PDF", "Thermal Printing"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+      "alt": "Parcel ready to be shipped"
+    },
+    "slug": "shipping-desk-labels"
+  },
+  {
+    "title": "Invoice Automation — Recurring Billing & Reminders",
+    "description": "Billing back-office for a small service company. Contracts generate numbered PDF invoices on schedule, overdue invoices chase themselves, and month-end is a report instead of a copying session.",
+    "tags": ["Node.js", "PostgreSQL", "PDF", "Cron", "Email"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80",
+      "alt": "Signing an invoice on paper"
+    },
+    "slug": "invoice-automation"
+  },
+  {
+    "title": "Stockroom — Barcode Inventory Management",
+    "description": "Stock control for a small wholesale supplier: phone camera as barcode scanner, live stock levels across two locations, reorder points that raise their own purchase orders, and a stocktake app that works with gloves on.",
+    "tags": ["React", "TypeScript", "Node.js", "PostgreSQL", "Barcode"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80",
+      "alt": "Warehouse shelving with stock totes"
+    },
+    "slug": "stockroom-inventory"
+  },
+  {
+    "title": "Contact Card Sites — One-Pages for Local Trades",
+    "description": "A batch of single-page sites for local tradespeople: name, trade, service area, real photos, tap-to-call and a vCard download. One shared template, each site owned by its owner and editable without me.",
+    "tags": ["HTML", "CSS", "JavaScript", "SEO", "vCard"],
+    "image": {
+      "src": "https://images.unsplash.com/photo-1528747045269-390fe33c19f2?w=800&q=80",
+      "alt": "Contact details on a letterboard"
+    },
+    "slug": "contact-card-sites"
   }
 ]
